@@ -1,0 +1,47 @@
+syntax = "proto3";
+package rook.rook;
+
+option go_package = "github.com/cmwaters/rook/x/rook/types";
+
+import "gogoproto/gogo.proto";
+
+message State {
+  repeated Tile board = 1;
+  map<string, Faction> players = 2;
+  uint32 step = 3;
+  uint32 width = 4;
+}
+
+message Tile {
+  Landscape landscape = 1;
+  uint32 population = 2;
+  Faction faction = 3;
+}
+
+message Faction {
+  string moniker = 1;
+  uint32 food = 2;
+  uint32 wood = 3;
+  uint32 stone = 4;
+  map<uint32, uint32> population = 5;
+  map<uint32, Settlement> settlements = 6;
+}
+
+enum Landscape {
+  LANDSCAPE_UNKNOWN = 0; 
+  LANDSCAPE_PLAINS = 1;
+  LANDSCAPE_FOREST = 2;
+  LANDSCAPE_MOUNTAINS = 3;
+  LANDSCAPE_LAKE = 4;
+}
+
+enum Settlement {
+  SETTLEMENT_UNKNOWN = 0;
+  SETTLEMENT_TOWN = 1;
+  SETTLEMENT_CITY = 2;
+  SETTLEMENT_CAPITAL = 3;
+  SETTLEMENT_LUMBERMILL = 4;
+  SETTLEMENT_QUARRY = 5;
+  SETTLEMENT_FARM = 6;
+  SETTLEMENT_ROOK = 7;
+}

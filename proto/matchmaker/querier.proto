@@ -1,9 +1,9 @@
 syntax = "proto3";
-package rook.matchmaker.v1beta1;
+package rook.matchmaker;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
-import "matchmaker/v1beta/findGame.proto";
+import "matchmaker/findGame.proto";
 
 option go_package = "github.com/cmwaters/rook/x/matchmaker/types";
 

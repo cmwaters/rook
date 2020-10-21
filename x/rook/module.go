@@ -111,7 +111,7 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
 
 func NewGame(players []sdk.AccAddress) {
 
-	
+
 }
 
 // Name returns the capability module's name.

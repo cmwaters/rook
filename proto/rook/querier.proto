@@ -1,10 +1,10 @@
 syntax = "proto3";
-package rook.rook.v1beta1;
+package rook.rook;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
-import "rook/v1beta/build.proto";
-import "rook/v1beta/move.proto";
+import "rook/build.proto";
+import "rook/move.proto";
 
 
 option go_package = "github.com/cmwaters/rook/x/rook/types";

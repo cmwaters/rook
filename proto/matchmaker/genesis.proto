@@ -1,5 +1,5 @@
 syntax = "proto3";
-package rook.matchmaker.v1beta1;
+package rook.matchmaker;
 
 option go_package = "github.com/cmwaters/rook/x/matchmaker/types";
 
