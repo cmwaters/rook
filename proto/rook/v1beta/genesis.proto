@@ -1,0 +1,9 @@
+syntax = "proto3";
+package rook.rook.v1beta1;
+
+option go_package = "github.com/cmwaters/rook/x/rook/types";
+
+// GenesisState defines the capability module's genesis state.
+message GenesisState {
+}
+
