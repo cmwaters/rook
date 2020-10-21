@@ -78,6 +78,9 @@ import (
 	rookkeeper "github.com/cmwaters/rook/x/rook/keeper"
 	rooktypes "github.com/cmwaters/rook/x/rook/types"
 	// this line is used by starport scaffolding # stargate/app/moduleImport
+		"github.com/cmwaters/rook/x/matchmaker"
+		matchmakerkeeper "github.com/cmwaters/rook/x/matchmaker/keeper"
+		matchmakertypes "github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 var (
@@ -109,6 +112,7 @@ var (
 		transfer.AppModuleBasic{},
 		rook.AppModuleBasic{},
 		// this line is used by starport scaffolding # stargate/app/moduleBasic
+		matchmaker.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -169,6 +173,7 @@ type App struct {
 
 	rookKeeper rookkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
+		matchmakerKeeper matchmakerkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -198,6 +203,7 @@ func New(
 		evidencetypes.StoreKey, ibctransfertypes.StoreKey, capabilitytypes.StoreKey,
         rooktypes.StoreKey,
 		// this line is used by starport scaffolding # stargate/app/storeKey
+		matchmakertypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -301,6 +307,11 @@ func New(
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
+		app.matchmakerKeeper = *matchmakerkeeper.NewKeeper(
+			appCodec,
+			keys[matchmakertypes.StoreKey],
+			keys[matchmakertypes.MemStoreKey],
+		)
 
 	// NOTE: Any module instantiated in the module manager that is later modified
 	// must be passed by reference here.
@@ -327,6 +338,7 @@ func New(
 		transferModule,
 		rook.NewAppModule(appCodec, app.rookKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
+		matchmaker.NewAppModule(appCodec, app.matchmakerKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -360,6 +372,7 @@ func New(
 		evidencetypes.ModuleName,
 		ibctransfertypes.ModuleName,
 		// this line is used by starport scaffolding # stargate/app/initGenesis
+		matchmakertypes.ModuleName,
 	)
 
     app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -534,6 +547,7 @@ func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyA
     paramsKeeper.Subspace(crisistypes.ModuleName)
 	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
 	// this line is used by starport scaffolding # stargate/app/paramSubspace
+		paramsKeeper.Subspace(matchmakertypes.ModuleName)
 
 	return paramsKeeper
 }

@@ -1,4 +1,4 @@
-package rook
+package matchmaker
 
 import (
 	"encoding/json"
@@ -16,10 +16,10 @@ import (
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cmwaters/rook/x/rook/keeper"
-	"github.com/cmwaters/rook/x/rook/types"
-	"github.com/cmwaters/rook/x/rook/client/cli"
-	"github.com/cmwaters/rook/x/rook/client/rest"
+	"github.com/cmwaters/rook/x/matchmaker/keeper"
+	"github.com/cmwaters/rook/x/matchmaker/types"
+	"github.com/cmwaters/rook/x/matchmaker/client/cli"
+	"github.com/cmwaters/rook/x/matchmaker/client/rest"
 )
 
 var (
@@ -107,11 +107,6 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
 		AppModuleBasic: NewAppModuleBasic(cdc),
 		keeper:         keeper,
 	}
-}
-
-func NewGame(players []sdk.AccAddress) {
-
-	
 }
 
 // Name returns the capability module's name.

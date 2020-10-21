@@ -10,12 +10,12 @@ import (
 	// "github.com/cosmos/cosmos-sdk/client/flags"
 	// sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
 func GetQueryCmd(queryRoute string) *cobra.Command {
-	// Group rook queries under a subcommand
+	// Group matchmaker queries under a subcommand
 	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      fmt.Sprintf("Querying commands for the %s module", types.ModuleName),
@@ -24,11 +24,9 @@ func GetQueryCmd(queryRoute string) *cobra.Command {
 		RunE:                       client.ValidateCmd,
 	}
 
-    // this line is used by starport scaffolding # 1
+	// this line is used by starport scaffolding # 1
 
-	cmd.AddCommand(CmdListBuild())
-
-	cmd.AddCommand(CmdListMove())
+	cmd.AddCommand(CmdListFindGame())
 
 	return cmd 
 }

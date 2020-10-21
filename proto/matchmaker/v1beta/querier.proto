@@ -1,0 +1,24 @@
+syntax = "proto3";
+package rook.matchmaker.v1beta1;
+
+import "cosmos/base/query/v1beta1/pagination.proto";
+// this line is used by starport scaffolding # 1
+import "matchmaker/v1beta/findGame.proto";
+
+option go_package = "github.com/cmwaters/rook/x/matchmaker/types";
+
+// Query defines the gRPC querier service.
+service Query {
+    // this line is used by starport scaffolding # 2
+	rpc AllFindGame(QueryAllFindGameRequest) returns (QueryAllFindGameResponse);
+}
+
+// this line is used by starport scaffolding # 3
+message QueryAllFindGameRequest {
+	cosmos.base.query.v1beta1.PageRequest pagination = 1;
+}
+
+message QueryAllFindGameResponse {
+	repeated MsgFindGame findGame = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
