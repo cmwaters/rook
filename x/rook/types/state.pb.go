@@ -5,7 +5,6 @@ package types
 
 import (
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	io "io"
 	math "math"
@@ -26,27 +25,27 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type Landscape int32
 
 const (
-	Landscape_LANDSCAPE_UNKNOWN   Landscape = 0
-	Landscape_LANDSCAPE_PLAINS    Landscape = 1
-	Landscape_LANDSCAPE_FOREST    Landscape = 2
-	Landscape_LANDSCAPE_MOUNTAINS Landscape = 3
-	Landscape_LANDSCAPE_LAKE      Landscape = 4
+	Landscape_L_UNKNOWN Landscape = 0
+	Landscape_PLAINS    Landscape = 1
+	Landscape_FOREST    Landscape = 2
+	Landscape_MOUNTAINS Landscape = 3
+	Landscape_LAKE      Landscape = 4
 )
 
 var Landscape_name = map[int32]string{
-	0: "LANDSCAPE_UNKNOWN",
-	1: "LANDSCAPE_PLAINS",
-	2: "LANDSCAPE_FOREST",
-	3: "LANDSCAPE_MOUNTAINS",
-	4: "LANDSCAPE_LAKE",
+	0: "L_UNKNOWN",
+	1: "PLAINS",
+	2: "FOREST",
+	3: "MOUNTAINS",
+	4: "LAKE",
 }
 
 var Landscape_value = map[string]int32{
-	"LANDSCAPE_UNKNOWN":   0,
-	"LANDSCAPE_PLAINS":    1,
-	"LANDSCAPE_FOREST":    2,
-	"LANDSCAPE_MOUNTAINS": 3,
-	"LANDSCAPE_LAKE":      4,
+	"L_UNKNOWN": 0,
+	"PLAINS":    1,
+	"FOREST":    2,
+	"MOUNTAINS": 3,
+	"LAKE":      4,
 }
 
 func (x Landscape) String() string {
@@ -60,36 +59,36 @@ func (Landscape) EnumDescriptor() ([]byte, []int) {
 type Settlement int32
 
 const (
-	Settlement_SETTLEMENT_UNKNOWN    Settlement = 0
-	Settlement_SETTLEMENT_TOWN       Settlement = 1
-	Settlement_SETTLEMENT_CITY       Settlement = 2
-	Settlement_SETTLEMENT_CAPITAL    Settlement = 3
-	Settlement_SETTLEMENT_LUMBERMILL Settlement = 4
-	Settlement_SETTLEMENT_QUARRY     Settlement = 5
-	Settlement_SETTLEMENT_FARM       Settlement = 6
-	Settlement_SETTLEMENT_ROOK       Settlement = 7
+	Settlement_S_UNKNOWN  Settlement = 0
+	Settlement_TOWN       Settlement = 1
+	Settlement_CITY       Settlement = 2
+	Settlement_CAPITAL    Settlement = 3
+	Settlement_LUMBERMILL Settlement = 4
+	Settlement_QUARRY     Settlement = 5
+	Settlement_FARM       Settlement = 6
+	Settlement_ROOK       Settlement = 7
 )
 
 var Settlement_name = map[int32]string{
-	0: "SETTLEMENT_UNKNOWN",
-	1: "SETTLEMENT_TOWN",
-	2: "SETTLEMENT_CITY",
-	3: "SETTLEMENT_CAPITAL",
-	4: "SETTLEMENT_LUMBERMILL",
-	5: "SETTLEMENT_QUARRY",
-	6: "SETTLEMENT_FARM",
-	7: "SETTLEMENT_ROOK",
+	0: "S_UNKNOWN",
+	1: "TOWN",
+	2: "CITY",
+	3: "CAPITAL",
+	4: "LUMBERMILL",
+	5: "QUARRY",
+	6: "FARM",
+	7: "ROOK",
 }
 
 var Settlement_value = map[string]int32{
-	"SETTLEMENT_UNKNOWN":    0,
-	"SETTLEMENT_TOWN":       1,
-	"SETTLEMENT_CITY":       2,
-	"SETTLEMENT_CAPITAL":    3,
-	"SETTLEMENT_LUMBERMILL": 4,
-	"SETTLEMENT_QUARRY":     5,
-	"SETTLEMENT_FARM":       6,
-	"SETTLEMENT_ROOK":       7,
+	"S_UNKNOWN":  0,
+	"TOWN":       1,
+	"CITY":       2,
+	"CAPITAL":    3,
+	"LUMBERMILL": 4,
+	"QUARRY":     5,
+	"FARM":       6,
+	"ROOK":       7,
 }
 
 func (x Settlement) String() string {
@@ -100,25 +99,25 @@ func (Settlement) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_5fdb64879681e3ce, []int{1}
 }
 
-type State struct {
-	Board   []*Tile             `protobuf:"bytes,1,rep,name=board,proto3" json:"board,omitempty"`
-	Players map[string]*Faction `protobuf:"bytes,2,rep,name=players,proto3" json:"players,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	Step    uint32              `protobuf:"varint,3,opt,name=step,proto3" json:"step,omitempty"`
-	Width   uint32              `protobuf:"varint,4,opt,name=width,proto3" json:"width,omitempty"`
+// This is what is visible to each player
+type PartialState struct {
+	Map       map[uint32]*Tile `protobuf:"bytes,1,rep,name=map,proto3" json:"map,omitempty" protobuf_key:"varint,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Resources *ResourceSet     `protobuf:"bytes,2,opt,name=resources,proto3" json:"resources,omitempty"`
+	Step      uint32           `protobuf:"varint,3,opt,name=step,proto3" json:"step,omitempty"`
 }
 
-func (m *State) Reset()         { *m = State{} }
-func (m *State) String() string { return proto.CompactTextString(m) }
-func (*State) ProtoMessage()    {}
-func (*State) Descriptor() ([]byte, []int) {
+func (m *PartialState) Reset()         { *m = PartialState{} }
+func (m *PartialState) String() string { return proto.CompactTextString(m) }
+func (*PartialState) ProtoMessage()    {}
+func (*PartialState) Descriptor() ([]byte, []int) {
 	return fileDescriptor_5fdb64879681e3ce, []int{0}
 }
-func (m *State) XXX_Unmarshal(b []byte) error {
+func (m *PartialState) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *State) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *PartialState) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_State.Marshal(b, m, deterministic)
+		return xxx_messageInfo_PartialState.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -128,42 +127,35 @@ func (m *State) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *State) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_State.Merge(m, src)
+func (m *PartialState) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_PartialState.Merge(m, src)
 }
-func (m *State) XXX_Size() int {
+func (m *PartialState) XXX_Size() int {
 	return m.Size()
 }
-func (m *State) XXX_DiscardUnknown() {
-	xxx_messageInfo_State.DiscardUnknown(m)
+func (m *PartialState) XXX_DiscardUnknown() {
+	xxx_messageInfo_PartialState.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_State proto.InternalMessageInfo
+var xxx_messageInfo_PartialState proto.InternalMessageInfo
 
-func (m *State) GetBoard() []*Tile {
+func (m *PartialState) GetMap() map[uint32]*Tile {
 	if m != nil {
-		return m.Board
+		return m.Map
 	}
 	return nil
 }
 
-func (m *State) GetPlayers() map[string]*Faction {
+func (m *PartialState) GetResources() *ResourceSet {
 	if m != nil {
-		return m.Players
+		return m.Resources
 	}
 	return nil
 }
 
-func (m *State) GetStep() uint32 {
+func (m *PartialState) GetStep() uint32 {
 	if m != nil {
 		return m.Step
-	}
-	return 0
-}
-
-func (m *State) GetWidth() uint32 {
-	if m != nil {
-		return m.Width
 	}
 	return 0
 }
@@ -211,7 +203,7 @@ func (m *Tile) GetLandscape() Landscape {
 	if m != nil {
 		return m.Landscape
 	}
-	return Landscape_LANDSCAPE_UNKNOWN
+	return Landscape_L_UNKNOWN
 }
 
 func (m *Tile) GetPopulation() uint32 {
@@ -312,64 +304,123 @@ func (m *Faction) GetSettlements() map[uint32]Settlement {
 	return nil
 }
 
+type ResourceSet struct {
+	Food  uint32 `protobuf:"varint,1,opt,name=food,proto3" json:"food,omitempty"`
+	Stone uint32 `protobuf:"varint,2,opt,name=stone,proto3" json:"stone,omitempty"`
+	Wood  uint32 `protobuf:"varint,3,opt,name=wood,proto3" json:"wood,omitempty"`
+}
+
+func (m *ResourceSet) Reset()         { *m = ResourceSet{} }
+func (m *ResourceSet) String() string { return proto.CompactTextString(m) }
+func (*ResourceSet) ProtoMessage()    {}
+func (*ResourceSet) Descriptor() ([]byte, []int) {
+	return fileDescriptor_5fdb64879681e3ce, []int{3}
+}
+func (m *ResourceSet) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ResourceSet) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ResourceSet.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ResourceSet) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ResourceSet.Merge(m, src)
+}
+func (m *ResourceSet) XXX_Size() int {
+	return m.Size()
+}
+func (m *ResourceSet) XXX_DiscardUnknown() {
+	xxx_messageInfo_ResourceSet.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ResourceSet proto.InternalMessageInfo
+
+func (m *ResourceSet) GetFood() uint32 {
+	if m != nil {
+		return m.Food
+	}
+	return 0
+}
+
+func (m *ResourceSet) GetStone() uint32 {
+	if m != nil {
+		return m.Stone
+	}
+	return 0
+}
+
+func (m *ResourceSet) GetWood() uint32 {
+	if m != nil {
+		return m.Wood
+	}
+	return 0
+}
+
 func init() {
 	proto.RegisterEnum("rook.rook.Landscape", Landscape_name, Landscape_value)
 	proto.RegisterEnum("rook.rook.Settlement", Settlement_name, Settlement_value)
-	proto.RegisterType((*State)(nil), "rook.rook.State")
-	proto.RegisterMapType((map[string]*Faction)(nil), "rook.rook.State.PlayersEntry")
+	proto.RegisterType((*PartialState)(nil), "rook.rook.PartialState")
+	proto.RegisterMapType((map[uint32]*Tile)(nil), "rook.rook.PartialState.MapEntry")
 	proto.RegisterType((*Tile)(nil), "rook.rook.Tile")
 	proto.RegisterType((*Faction)(nil), "rook.rook.Faction")
 	proto.RegisterMapType((map[uint32]uint32)(nil), "rook.rook.Faction.PopulationEntry")
 	proto.RegisterMapType((map[uint32]Settlement)(nil), "rook.rook.Faction.SettlementsEntry")
+	proto.RegisterType((*ResourceSet)(nil), "rook.rook.ResourceSet")
 }
 
 func init() { proto.RegisterFile("rook/state.proto", fileDescriptor_5fdb64879681e3ce) }
 
 var fileDescriptor_5fdb64879681e3ce = []byte{
-	// 627 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x54, 0x4f, 0x6f, 0xd3, 0x4e,
-	0x10, 0xcd, 0xe6, 0x4f, 0xa3, 0x4c, 0x7f, 0x69, 0xf7, 0xb7, 0x4d, 0xc1, 0x44, 0xc2, 0x8a, 0x82,
-	0x2a, 0x45, 0x05, 0x39, 0x52, 0x38, 0x80, 0x90, 0x10, 0x72, 0x8b, 0x2b, 0x45, 0x75, 0x9c, 0xb0,
-	0x71, 0x84, 0xca, 0x05, 0xb9, 0xc9, 0xb6, 0x8d, 0x9a, 0x64, 0x2d, 0x7b, 0x4b, 0x89, 0xb8, 0x71,
-	0xe2, 0xc8, 0x67, 0xe2, 0xc4, 0xb1, 0x47, 0x8e, 0xd0, 0x7e, 0x11, 0xb4, 0xeb, 0xfc, 0xd9, 0x86,
-	0x5c, 0x92, 0xd9, 0x37, 0x6f, 0xde, 0xcc, 0xec, 0xb3, 0x16, 0x70, 0xc4, 0xf9, 0x65, 0x3d, 0x16,
-	0x81, 0x60, 0x56, 0x18, 0x71, 0xc1, 0x49, 0x41, 0x22, 0x96, 0xfc, 0x29, 0x97, 0xce, 0xf9, 0x39,
-	0x57, 0x68, 0x5d, 0x46, 0x09, 0xa1, 0xfa, 0x07, 0x41, 0xae, 0x2b, 0x0b, 0xc8, 0x1e, 0xe4, 0x4e,
-	0x79, 0x10, 0x0d, 0x0c, 0x54, 0xc9, 0xd4, 0x36, 0x1b, 0xdb, 0xd6, 0xa2, 0xd4, 0xf2, 0x87, 0x23,
-	0x46, 0x93, 0x2c, 0x79, 0x01, 0xf9, 0x70, 0x14, 0x4c, 0x59, 0x14, 0x1b, 0x69, 0x45, 0x7c, 0xac,
-	0x11, 0x95, 0x92, 0xd5, 0x49, 0xf2, 0xce, 0x44, 0x44, 0x53, 0x3a, 0x67, 0x13, 0x02, 0xd9, 0x58,
-	0xb0, 0xd0, 0xc8, 0x54, 0x50, 0xad, 0x48, 0x55, 0x4c, 0x4a, 0x90, 0xbb, 0x1e, 0x0e, 0xc4, 0x85,
-	0x91, 0x55, 0x60, 0x72, 0x28, 0x7b, 0xf0, 0x9f, 0x2e, 0x41, 0x30, 0x64, 0x2e, 0xd9, 0xd4, 0x40,
-	0x15, 0x54, 0x2b, 0x50, 0x19, 0x92, 0x1a, 0xe4, 0x3e, 0x05, 0xa3, 0x2b, 0x66, 0xa4, 0x2b, 0xa8,
-	0xb6, 0xd9, 0x20, 0xda, 0x08, 0x47, 0x41, 0x5f, 0x0c, 0xf9, 0x84, 0x26, 0x84, 0x57, 0xe9, 0x97,
-	0xa8, 0xfa, 0x0d, 0x41, 0x56, 0xae, 0x40, 0x1a, 0x50, 0x18, 0x05, 0x93, 0x41, 0xdc, 0x0f, 0x42,
-	0xa6, 0xe4, 0xb6, 0x1a, 0x25, 0xad, 0xd4, 0x9d, 0xe7, 0xe8, 0x92, 0x46, 0x4c, 0x80, 0x90, 0x87,
-	0x57, 0xa3, 0x40, 0xaa, 0xaa, 0x7e, 0x45, 0xaa, 0x21, 0xe4, 0x19, 0xe4, 0xcf, 0x92, 0x96, 0x6a,
-	0xb3, 0xf5, 0xc3, 0xcc, 0x29, 0xd5, 0xaf, 0x19, 0xc8, 0xcf, 0x40, 0x62, 0x40, 0x7e, 0xcc, 0x27,
-	0xc3, 0x4b, 0x16, 0xcd, 0x56, 0x9b, 0x1f, 0xe5, 0x55, 0x9d, 0x71, 0x3e, 0x98, 0x75, 0x53, 0xb1,
-	0xc4, 0xae, 0x25, 0x36, 0xbb, 0x3e, 0x19, 0xcb, 0xeb, 0x8b, 0x05, 0x9f, 0xb0, 0xf9, 0xf5, 0xa9,
-	0x03, 0x39, 0xb8, 0x37, 0x71, 0x4e, 0x99, 0x54, 0xfd, 0x77, 0x28, 0xab, 0xb3, 0x20, 0x25, 0x4e,
-	0xe9, 0x5b, 0x39, 0xb0, 0x19, 0x33, 0x21, 0x46, 0x6c, 0xcc, 0x26, 0x22, 0x36, 0x36, 0x94, 0xc8,
-	0x93, 0x35, 0x22, 0xdd, 0x25, 0x2b, 0x51, 0xd1, 0xeb, 0xca, 0xaf, 0x61, 0x7b, 0xa5, 0x8b, 0x6e,
-	0x66, 0x31, 0x31, 0xb3, 0xa4, 0x9b, 0x59, 0xd4, 0x8c, 0x2b, 0xf7, 0x00, 0xaf, 0xea, 0xaf, 0xa9,
-	0x7f, 0xaa, 0xd7, 0x6f, 0x35, 0x76, 0xf5, 0xef, 0x71, 0x51, 0xad, 0xc9, 0xee, 0x7f, 0x81, 0xc2,
-	0xc2, 0x6a, 0xb2, 0x0b, 0xff, 0xbb, 0xb6, 0xf7, 0xb6, 0x7b, 0x68, 0x77, 0x9c, 0x8f, 0x3d, 0xef,
-	0xd8, 0x6b, 0xbf, 0xf7, 0x70, 0x8a, 0x94, 0x00, 0x2f, 0xe1, 0x8e, 0x6b, 0x37, 0xbd, 0x2e, 0x46,
-	0xf7, 0xd1, 0xa3, 0x36, 0x75, 0xba, 0x3e, 0x4e, 0x93, 0x87, 0xb0, 0xb3, 0x44, 0x5b, 0xed, 0x9e,
-	0xe7, 0x2b, 0x7a, 0x86, 0x10, 0xd8, 0x5a, 0x26, 0x5c, 0xfb, 0xd8, 0xc1, 0xd9, 0xfd, 0x1f, 0x08,
-	0x60, 0x39, 0x16, 0x79, 0x00, 0xa4, 0xeb, 0xf8, 0xbe, 0xeb, 0xb4, 0x1c, 0xcf, 0xd7, 0xfa, 0xef,
-	0xc0, 0xb6, 0x86, 0xfb, 0x12, 0x44, 0x2b, 0xe0, 0x61, 0xd3, 0x3f, 0xc1, 0xe9, 0x15, 0x85, 0x43,
-	0xbb, 0xd3, 0xf4, 0x6d, 0x17, 0x67, 0xc8, 0x23, 0xd8, 0xd5, 0x70, 0xb7, 0xd7, 0x3a, 0x70, 0x68,
-	0xab, 0xe9, 0xba, 0x38, 0x2b, 0x77, 0xd6, 0x52, 0xef, 0x7a, 0x36, 0xa5, 0x27, 0x38, 0xb7, 0x22,
-	0x7f, 0x64, 0xd3, 0x16, 0xde, 0x58, 0x01, 0x69, 0xbb, 0x7d, 0x8c, 0xf3, 0x07, 0x6f, 0x7e, 0xde,
-	0x9a, 0xe8, 0xe6, 0xd6, 0x44, 0xbf, 0x6f, 0x4d, 0xf4, 0xfd, 0xce, 0x4c, 0xdd, 0xdc, 0x99, 0xa9,
-	0x5f, 0x77, 0x66, 0xea, 0xc3, 0xde, 0xf9, 0x50, 0x5c, 0x5c, 0x9d, 0x5a, 0x7d, 0x3e, 0xae, 0xf7,
-	0xc7, 0xd7, 0x81, 0x60, 0x51, 0x5c, 0x57, 0xcf, 0xd2, 0xe7, 0xe4, 0x4f, 0x4c, 0x43, 0x16, 0x9f,
-	0x6e, 0xa8, 0xd7, 0xe7, 0xf9, 0xdf, 0x00, 0x00, 0x00, 0xff, 0xff, 0xc3, 0xf5, 0xc3, 0x83, 0xb2,
-	0x04, 0x00, 0x00,
+	// 596 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x6c, 0x54, 0x4f, 0x6b, 0xdb, 0x4e,
+	0x10, 0xf5, 0x5a, 0xb2, 0x1d, 0x8f, 0x7f, 0x4e, 0x96, 0x25, 0xbf, 0x22, 0x72, 0x10, 0xc6, 0x25,
+	0x10, 0xd2, 0xa2, 0x80, 0xda, 0x43, 0x29, 0x94, 0xa2, 0x04, 0xa7, 0x18, 0xcb, 0x7f, 0xba, 0x92,
+	0x29, 0xe9, 0xa5, 0x28, 0xce, 0xa6, 0x35, 0x91, 0xb5, 0x42, 0x5a, 0x37, 0xcd, 0xb5, 0xa7, 0x1e,
+	0xfb, 0xb1, 0x7a, 0xcc, 0xa5, 0xd0, 0x63, 0x49, 0xbe, 0x48, 0xd9, 0x95, 0xff, 0x6c, 0x53, 0x5f,
+	0xec, 0xb7, 0x33, 0xef, 0xbd, 0x19, 0xcd, 0x2c, 0x0b, 0x38, 0xe3, 0xfc, 0xea, 0x28, 0x17, 0x91,
+	0x60, 0x4e, 0x9a, 0x71, 0xc1, 0x49, 0x5d, 0x46, 0x1c, 0xf9, 0xd3, 0xfe, 0x89, 0xe0, 0xbf, 0x51,
+	0x94, 0x89, 0x69, 0x14, 0x07, 0x92, 0x41, 0x5c, 0x30, 0x66, 0x51, 0x6a, 0xa1, 0x96, 0x71, 0xd0,
+	0x70, 0x5b, 0xce, 0x8a, 0xe9, 0xe8, 0x2c, 0xa7, 0x1f, 0xa5, 0x9d, 0x44, 0x64, 0x37, 0x54, 0x92,
+	0xc9, 0x73, 0xa8, 0x67, 0x2c, 0xe7, 0xf3, 0x6c, 0xc2, 0x72, 0xab, 0xdc, 0x42, 0x07, 0x0d, 0xf7,
+	0x91, 0xa6, 0xa4, 0x8b, 0x5c, 0xc0, 0x04, 0x5d, 0x13, 0x09, 0x01, 0x33, 0x17, 0x2c, 0xb5, 0x8c,
+	0x16, 0x3a, 0x68, 0x52, 0x85, 0xf7, 0xde, 0xc0, 0xd6, 0xd2, 0x9a, 0x60, 0x30, 0xae, 0xd8, 0x8d,
+	0x85, 0x54, 0x5a, 0x42, 0xb2, 0x0f, 0x95, 0xcf, 0x51, 0x3c, 0x67, 0x8b, 0x1a, 0x3b, 0x5a, 0x8d,
+	0x70, 0x1a, 0x33, 0x5a, 0x64, 0x5f, 0x96, 0x5f, 0xa0, 0xf6, 0x37, 0x04, 0xa6, 0x8c, 0x11, 0x17,
+	0xea, 0x71, 0x94, 0x5c, 0xe4, 0x93, 0x28, 0x65, 0xca, 0x6b, 0xdb, 0xdd, 0xd5, 0x74, 0xfe, 0x32,
+	0x47, 0xd7, 0x34, 0x62, 0x03, 0xa4, 0x3c, 0x9d, 0xc7, 0x91, 0x98, 0xf2, 0x44, 0x15, 0x6b, 0x52,
+	0x2d, 0x42, 0x9e, 0x42, 0xed, 0x32, 0x9a, 0xa8, 0xa4, 0xa1, 0x3a, 0x21, 0x9a, 0xe3, 0x69, 0x91,
+	0xa1, 0x4b, 0x4a, 0xfb, 0xab, 0x01, 0xb5, 0x45, 0x90, 0x58, 0x50, 0x9b, 0xf1, 0x64, 0x7a, 0xc5,
+	0x32, 0xd5, 0x4b, 0x9d, 0x2e, 0x8f, 0x72, 0x1a, 0x97, 0x9c, 0x5f, 0x2c, 0xaa, 0x29, 0x2c, 0x63,
+	0xd7, 0x32, 0xb6, 0x98, 0x90, 0xc4, 0x64, 0x17, 0x2a, 0xb9, 0xe0, 0x09, 0xb3, 0x4c, 0x15, 0x2c,
+	0x0e, 0xe4, 0xf8, 0xaf, 0x8e, 0x2b, 0x6a, 0x79, 0xed, 0x7f, 0x9b, 0x72, 0x46, 0x2b, 0x52, 0xb1,
+	0x3e, 0xfd, 0xab, 0x3a, 0xd0, 0xc8, 0x99, 0x10, 0x31, 0x9b, 0xb1, 0x44, 0xe4, 0x56, 0x55, 0x99,
+	0x3c, 0xde, 0x60, 0x12, 0xac, 0x59, 0x85, 0x8b, 0xae, 0xdb, 0x7b, 0x05, 0x3b, 0x0f, 0xaa, 0x6c,
+	0xd8, 0xe4, 0xae, 0xbe, 0xc9, 0xa6, 0xb6, 0xb8, 0xbd, 0x31, 0xe0, 0x87, 0xfe, 0x1b, 0xf4, 0x4f,
+	0x74, 0xfd, 0xb6, 0xfb, 0xbf, 0xd6, 0xe5, 0x5a, 0xad, 0xdf, 0x87, 0x1e, 0x34, 0xb4, 0x6b, 0xb8,
+	0x9a, 0x36, 0xd2, 0xa6, 0xbd, 0x9a, 0x6c, 0x59, 0x9f, 0xec, 0x86, 0x1d, 0x1c, 0xf6, 0xa0, 0xbe,
+	0xba, 0x37, 0xa4, 0x09, 0x75, 0xff, 0xc3, 0x78, 0xd0, 0x1b, 0x0c, 0xdf, 0x0d, 0x70, 0x89, 0x00,
+	0x54, 0x47, 0xbe, 0xd7, 0x1d, 0x04, 0x18, 0x49, 0x7c, 0x3a, 0xa4, 0x9d, 0x20, 0xc4, 0x65, 0x49,
+	0xeb, 0x0f, 0xc7, 0x83, 0x50, 0xa5, 0x0c, 0xb2, 0x05, 0xa6, 0xef, 0xf5, 0x3a, 0xd8, 0x3c, 0x8c,
+	0x01, 0xd6, 0x2d, 0x4b, 0x5a, 0xa0, 0xb9, 0x6d, 0x81, 0x19, 0x4a, 0x84, 0x24, 0x3a, 0xe9, 0x86,
+	0x67, 0xb8, 0x4c, 0x1a, 0x50, 0x3b, 0xf1, 0x46, 0xdd, 0xd0, 0xf3, 0xb1, 0x41, 0xb6, 0x01, 0xfc,
+	0x71, 0xff, 0xb8, 0x43, 0xfb, 0x5d, 0xdf, 0xc7, 0xa6, 0x2c, 0xf9, 0x76, 0xec, 0x51, 0x7a, 0x86,
+	0x2b, 0x52, 0x72, 0xea, 0xd1, 0x3e, 0xae, 0x4a, 0x44, 0x87, 0xc3, 0x1e, 0xae, 0x1d, 0xbf, 0xfe,
+	0x71, 0x67, 0xa3, 0xdb, 0x3b, 0x1b, 0xfd, 0xbe, 0xb3, 0xd1, 0xf7, 0x7b, 0xbb, 0x74, 0x7b, 0x6f,
+	0x97, 0x7e, 0xdd, 0xdb, 0xa5, 0xf7, 0xfb, 0x1f, 0xa7, 0xe2, 0xd3, 0xfc, 0xdc, 0x99, 0xf0, 0xd9,
+	0xd1, 0x64, 0x76, 0x1d, 0x09, 0x96, 0xe5, 0x47, 0xea, 0xe9, 0xf8, 0x52, 0xfc, 0x89, 0x9b, 0x94,
+	0xe5, 0xe7, 0x55, 0xf5, 0x84, 0x3c, 0xfb, 0x13, 0x00, 0x00, 0xff, 0xff, 0x27, 0x52, 0x34, 0x01,
+	0x56, 0x04, 0x00, 0x00,
 }
 
-func (m *State) Marshal() (dAtA []byte, err error) {
+func (m *PartialState) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -379,29 +430,36 @@ func (m *State) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *State) MarshalTo(dAtA []byte) (int, error) {
+func (m *PartialState) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *State) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *PartialState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
 	_ = l
-	if m.Width != 0 {
-		i = encodeVarintState(dAtA, i, uint64(m.Width))
-		i--
-		dAtA[i] = 0x20
-	}
 	if m.Step != 0 {
 		i = encodeVarintState(dAtA, i, uint64(m.Step))
 		i--
 		dAtA[i] = 0x18
 	}
-	if len(m.Players) > 0 {
-		for k := range m.Players {
-			v := m.Players[k]
+	if m.Resources != nil {
+		{
+			size, err := m.Resources.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintState(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Map) > 0 {
+		for k := range m.Map {
+			v := m.Map[k]
 			baseI := i
 			if v != nil {
 				{
@@ -415,26 +473,10 @@ func (m *State) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 				i--
 				dAtA[i] = 0x12
 			}
-			i -= len(k)
-			copy(dAtA[i:], k)
-			i = encodeVarintState(dAtA, i, uint64(len(k)))
+			i = encodeVarintState(dAtA, i, uint64(k))
 			i--
-			dAtA[i] = 0xa
+			dAtA[i] = 0x8
 			i = encodeVarintState(dAtA, i, uint64(baseI-i))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Board) > 0 {
-		for iNdEx := len(m.Board) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Board[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintState(dAtA, i, uint64(size))
-			}
 			i--
 			dAtA[i] = 0xa
 		}
@@ -562,6 +604,44 @@ func (m *Faction) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
+func (m *ResourceSet) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ResourceSet) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ResourceSet) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.Wood != 0 {
+		i = encodeVarintState(dAtA, i, uint64(m.Wood))
+		i--
+		dAtA[i] = 0x18
+	}
+	if m.Stone != 0 {
+		i = encodeVarintState(dAtA, i, uint64(m.Stone))
+		i--
+		dAtA[i] = 0x10
+	}
+	if m.Food != 0 {
+		i = encodeVarintState(dAtA, i, uint64(m.Food))
+		i--
+		dAtA[i] = 0x8
+	}
+	return len(dAtA) - i, nil
+}
+
 func encodeVarintState(dAtA []byte, offset int, v uint64) int {
 	offset -= sovState(v)
 	base := offset
@@ -573,20 +653,14 @@ func encodeVarintState(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *State) Size() (n int) {
+func (m *PartialState) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if len(m.Board) > 0 {
-		for _, e := range m.Board {
-			l = e.Size()
-			n += 1 + l + sovState(uint64(l))
-		}
-	}
-	if len(m.Players) > 0 {
-		for k, v := range m.Players {
+	if len(m.Map) > 0 {
+		for k, v := range m.Map {
 			_ = k
 			_ = v
 			l = 0
@@ -594,15 +668,16 @@ func (m *State) Size() (n int) {
 				l = v.Size()
 				l += 1 + sovState(uint64(l))
 			}
-			mapEntrySize := 1 + len(k) + sovState(uint64(len(k))) + l
+			mapEntrySize := 1 + sovState(uint64(k)) + l
 			n += mapEntrySize + 1 + sovState(uint64(mapEntrySize))
 		}
 	}
+	if m.Resources != nil {
+		l = m.Resources.Size()
+		n += 1 + l + sovState(uint64(l))
+	}
 	if m.Step != 0 {
 		n += 1 + sovState(uint64(m.Step))
-	}
-	if m.Width != 0 {
-		n += 1 + sovState(uint64(m.Width))
 	}
 	return n
 }
@@ -664,13 +739,31 @@ func (m *Faction) Size() (n int) {
 	return n
 }
 
+func (m *ResourceSet) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Food != 0 {
+		n += 1 + sovState(uint64(m.Food))
+	}
+	if m.Stone != 0 {
+		n += 1 + sovState(uint64(m.Stone))
+	}
+	if m.Wood != 0 {
+		n += 1 + sovState(uint64(m.Wood))
+	}
+	return n
+}
+
 func sovState(x uint64) (n int) {
 	return (math_bits.Len64(x|1) + 6) / 7
 }
 func sozState(x uint64) (n int) {
 	return sovState(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *State) Unmarshal(dAtA []byte) error {
+func (m *PartialState) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -693,15 +786,15 @@ func (m *State) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: State: wiretype end group for non-group")
+			return fmt.Errorf("proto: PartialState: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: State: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: PartialState: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Board", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Map", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -728,45 +821,11 @@ func (m *State) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Board = append(m.Board, &Tile{})
-			if err := m.Board[len(m.Board)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.Map == nil {
+				m.Map = make(map[uint32]*Tile)
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Players", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowState
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthState
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthState
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Players == nil {
-				m.Players = make(map[string]*Faction)
-			}
-			var mapkey string
-			var mapvalue *Faction
+			var mapkey uint32
+			var mapvalue *Tile
 			for iNdEx < postIndex {
 				entryPreIndex := iNdEx
 				var wire uint64
@@ -786,7 +845,6 @@ func (m *State) Unmarshal(dAtA []byte) error {
 				}
 				fieldNum := int32(wire >> 3)
 				if fieldNum == 1 {
-					var stringLenmapkey uint64
 					for shift := uint(0); ; shift += 7 {
 						if shift >= 64 {
 							return ErrIntOverflowState
@@ -796,24 +854,11 @@ func (m *State) Unmarshal(dAtA []byte) error {
 						}
 						b := dAtA[iNdEx]
 						iNdEx++
-						stringLenmapkey |= uint64(b&0x7F) << shift
+						mapkey |= uint32(b&0x7F) << shift
 						if b < 0x80 {
 							break
 						}
 					}
-					intStringLenmapkey := int(stringLenmapkey)
-					if intStringLenmapkey < 0 {
-						return ErrInvalidLengthState
-					}
-					postStringIndexmapkey := iNdEx + intStringLenmapkey
-					if postStringIndexmapkey < 0 {
-						return ErrInvalidLengthState
-					}
-					if postStringIndexmapkey > l {
-						return io.ErrUnexpectedEOF
-					}
-					mapkey = string(dAtA[iNdEx:postStringIndexmapkey])
-					iNdEx = postStringIndexmapkey
 				} else if fieldNum == 2 {
 					var mapmsglen int
 					for shift := uint(0); ; shift += 7 {
@@ -840,7 +885,7 @@ func (m *State) Unmarshal(dAtA []byte) error {
 					if postmsgIndex > l {
 						return io.ErrUnexpectedEOF
 					}
-					mapvalue = &Faction{}
+					mapvalue = &Tile{}
 					if err := mapvalue.Unmarshal(dAtA[iNdEx:postmsgIndex]); err != nil {
 						return err
 					}
@@ -860,7 +905,43 @@ func (m *State) Unmarshal(dAtA []byte) error {
 					iNdEx += skippy
 				}
 			}
-			m.Players[mapkey] = mapvalue
+			m.Map[mapkey] = mapvalue
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Resources", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowState
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthState
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthState
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Resources == nil {
+				m.Resources = &ResourceSet{}
+			}
+			if err := m.Resources.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 3:
 			if wireType != 0 {
@@ -877,25 +958,6 @@ func (m *State) Unmarshal(dAtA []byte) error {
 				b := dAtA[iNdEx]
 				iNdEx++
 				m.Step |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Width", wireType)
-			}
-			m.Width = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowState
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Width |= uint32(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
@@ -1367,6 +1429,116 @@ func (m *Faction) Unmarshal(dAtA []byte) error {
 			}
 			m.Settlements[mapkey] = mapvalue
 			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipState(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthState
+			}
+			if (iNdEx + skippy) < 0 {
+				return ErrInvalidLengthState
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ResourceSet) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowState
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ResourceSet: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ResourceSet: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Food", wireType)
+			}
+			m.Food = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowState
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Food |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 2:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Stone", wireType)
+			}
+			m.Stone = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowState
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Stone |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Wood", wireType)
+			}
+			m.Wood = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowState
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.Wood |= uint32(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipState(dAtA[iNdEx:])

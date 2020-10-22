@@ -28,27 +28,27 @@ func NewFaction(name string) *Faction {
 
 // Reap takes a Factions structures and accumulates all the resources accrued in that turn
 func (f *Faction) Reap() {
-	for position, settlement := range f.settlements {
+	for position, settlement := range f.Settlements {
 		switch settlement {
-		case SETTLEMENT_TOWN:
-			if populace, ok := f.population[position]; ok {
-				f.population[position] = populace + townPopulationRate
+		case Settlement_TOWN:
+			if populace, ok := f.Population[position]; ok {
+				f.Population[position] = populace + townPopulationRate
 			} else {
-				f.population[position] = townPopulationRate
+				f.Population[position] = townPopulationRate
 			}
-		case SETTLEMENT_CITY, Settlement_SETTLEMENT_CAPITAL:
-			if populace, ok := f.population[position]; ok {
-				f.population[position] = populace + cityPopulationRate
+		case Settlement_CITY, Settlement_CAPITAL:
+			if populace, ok := f.Population[position]; ok {
+				f.Population[position] = populace + cityPopulationRate
 			} else {
-				f.population[position] = cityPopulationRate
+				f.Population[position] = cityPopulationRate
 			}
-		case Lumbermill:
-			f.wood += lumbermillProductionRate
-		case Quarry:
-			f.wood += quarryProductionRate
-		case Farm:
-			f.food += farmProductionRate
-		default: // Outposts for example don't produce anything
+		case Settlement_LUMBERMILL:
+			f.Wood += lumbermillProductionRate
+		case Settlement_QUARRY:
+			f.Wood += quarryProductionRate
+		case Settlement_FARM:
+			f.Food += farmProductionRate
+		default: // Rooks for example don't produce anything
 			continue
 		}
 	}

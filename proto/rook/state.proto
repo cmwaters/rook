@@ -3,13 +3,14 @@ package rook.rook;
 
 option go_package = "github.com/cmwaters/rook/x/rook/types";
 
-import "gogoproto/gogo.proto";
+// full game state is never saved to disk nor gossiped - game state is 
+// expected to be short lived and can be derived from the state transitions 
 
-message State {
-  repeated Tile board = 1;
-  map<string, Faction> players = 2;
+// This is what is visible to each player
+message PartialState {
+  map<uint32, Tile> map = 1;
+  ResourceSet resources = 2;
   uint32 step = 3;
-  uint32 width = 4;
 }
 
 message Tile {
@@ -28,20 +29,26 @@ message Faction {
 }
 
 enum Landscape {
-  LANDSCAPE_UNKNOWN = 0; 
-  LANDSCAPE_PLAINS = 1;
-  LANDSCAPE_FOREST = 2;
-  LANDSCAPE_MOUNTAINS = 3;
-  LANDSCAPE_LAKE = 4;
+  L_UNKNOWN = 0; // has to be unique 
+  PLAINS = 1;
+  FOREST = 2;
+  MOUNTAINS = 3;
+  LAKE = 4;
 }
 
 enum Settlement {
-  SETTLEMENT_UNKNOWN = 0;
-  SETTLEMENT_TOWN = 1;
-  SETTLEMENT_CITY = 2;
-  SETTLEMENT_CAPITAL = 3;
-  SETTLEMENT_LUMBERMILL = 4;
-  SETTLEMENT_QUARRY = 5;
-  SETTLEMENT_FARM = 6;
-  SETTLEMENT_ROOK = 7;
+  S_UNKNOWN = 0; // has to be unique
+  TOWN = 1;
+  CITY = 2;
+  CAPITAL = 3;
+  LUMBERMILL = 4;
+  QUARRY = 5;
+  FARM = 6;
+  ROOK = 7;
+}
+
+message ResourceSet {
+  uint32 food = 1;
+  uint32 stone = 2;
+  uint32 wood = 3;
 }
