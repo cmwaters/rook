@@ -16,6 +16,7 @@ type Keeper struct {
 	memKey   sdk.StoreKey
 
 	games map[string]*types.GameState
+	pendingGames map[string]*types.PendingGameState
 	players map[string]string
 }
 
@@ -31,9 +32,23 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 	return ctx.Logger().With("module", fmt.Sprintf("x/%s", types.ModuleName))
 }
 
-func (k Keeper) NewGame(players []*sdk.AccAddress, config *types.GameConfig) {
-	gameId := "hello" // gameId should 
+func (k Keeper) AddGameVote(ctx sdk.Context, msg types.MsgReady) error {
+	game, ok := k.pendingGames[msg.Id]
+	if !ok {
+		return fmt.Errorf("game with id %s does not exist", msg.Id)
+	}
+	ready := game.AddVote(&msg.Creator)
+	if ready {
+		k.games[msg.Id] = types.NewGameState(game.Participants(), game.Config()) 
+		delete(k.pendingGames, msg.Id)
+	}
+	return nil
+}
 
-	k.games[gameId] = types.InitGame(players, config)
-
+func (k Keeper) InitGame(ctx sdk.Context, msg types.MsgInitialize) error {
+	if _, ok := k.pendingGames[msg.Id]; ok {
+		return fmt.Errorf("game with id %s already exists", msg.Id)
+	}
+	k.pendingGames[msg.Id] = types.NewPendingGame(msg.Players, msg.Id, msg.Config)
+	return nil
 }

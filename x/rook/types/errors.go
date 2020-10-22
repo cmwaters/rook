@@ -8,5 +8,5 @@ import (
 
 // x/rook module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrGameDoesNotExist = sdkerrors.Register(ModuleName, 1100, "game does not exist")
 )

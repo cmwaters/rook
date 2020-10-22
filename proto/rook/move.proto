@@ -8,8 +8,20 @@ import "gogoproto/gogo.proto";
 message MsgMove {
   string id = 1;
   bytes creator = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
-  string quantity = 3; 
-  string from = 4; 
-  string to = 5; 
+  uint32 quantity = 3; 
+  Position position = 4; 
+  Direction direction = 5; 
 }
 
+message Position {
+  uint32 x = 1;
+  uint32 y = 2;
+}
+
+enum Direction {
+  D_UNKNOWN = 0;
+  DOWN = 1;
+  LEFT = 2;
+  RIGHT = 3;
+  UP = 4;
+}

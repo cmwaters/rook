@@ -2,6 +2,7 @@ package rook
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/gogo/protobuf/grpc"
@@ -109,9 +110,9 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
 	}
 }
 
-func (am AppModule) NewGame(players []*sdk.AccAddress, config *types.GameConfig) {
-	am.keeper.NewGame(players, config)
-}
+// func (am AppModule) NewGame(players []*sdk.AccAddress, config *types.GameConfig) {
+// 	am.keeper.NewGame(players, config)
+// }
 
 // Name returns the capability module's name.
 func (am AppModule) Name() string {
@@ -128,7 +129,7 @@ func (AppModule) QuerierRoute() string { return "" }
 
 // LegacyQuerierHandler returns the capability module's Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+	return func(ctx Context, path []string, req abci.RequestQuery) ([]byte, error) { return []byte{}, errors.New("legacyQuerierHandler not implemented") }
 }
 
 // RegisterQueryService registers a GRPC query service to respond to the

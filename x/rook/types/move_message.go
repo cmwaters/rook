@@ -6,37 +6,39 @@ import (
 	"github.com/google/uuid"
 )
 
-var _ sdk.Msg = &MsgBuild{}
+var _ sdk.Msg = &MsgMove{}
 
-func NewMsgBuild(creator sdk.AccAddress, settlement string, position string) *MsgBuild {
-  return &MsgBuild{
+func NewMsgMove(creator sdk.AccAddress, quantity uint32, position Position, direction Direction) *MsgMove {
+  return &MsgMove{
     Id: uuid.New().String(),
 		Creator: creator,
-    Settlement: settlement,
-    Position: position,
+    Quantity: quantity,
+    Position: &position,
+    Direction: direction,
 	}
 }
 
-func (msg *MsgBuild) Route() string {
+func (msg *MsgMove) Route() string {
   return RouterKey
 }
 
-func (msg *MsgBuild) Type() string {
-  return "CreateBuild"
+func (msg *MsgMove) Type() string {
+  return "Move"
 }
 
-func (msg *MsgBuild) GetSigners() []sdk.AccAddress {
+func (msg *MsgMove) GetSigners() []sdk.AccAddress {
   return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
-func (msg *MsgBuild) GetSignBytes() []byte {
+func (msg *MsgMove) GetSignBytes() []byte {
   bz := ModuleCdc.MustMarshalJSON(msg)
   return sdk.MustSortJSON(bz)
 }
 
-func (msg *MsgBuild) ValidateBasic() error {
+func (msg *MsgMove) ValidateBasic() error {
   if msg.Creator.Empty() {
     return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "creator can't be empty")
   }
+
   return nil
 }

@@ -8,13 +8,6 @@ const (
 	farmProductionRate       = 1
 )
 
-
-
-type position struct {
-	X uint16
-	Y uint16
-}
-
 func NewFaction(name string) *Faction {
 	return &Faction{
 		Moniker:    name,
