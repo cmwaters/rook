@@ -3,9 +3,9 @@ package rook
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cmwaters/rook/x/rook/keeper"
 	"github.com/cmwaters/rook/x/rook/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
@@ -16,7 +16,7 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		var err error
 
 		switch msg := msg.(type) {
-        // this line is used by starport scaffolding # 1
+		// this line is used by starport scaffolding # 1
 		case *types.MsgBuild:
 			err = k.HandleBuildMessage(ctx, *msg)
 		case *types.MsgMove:
@@ -35,4 +35,3 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 		return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 	}
 }
-

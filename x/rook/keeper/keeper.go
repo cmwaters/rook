@@ -5,9 +5,9 @@ import (
 
 	"github.com/tendermint/tendermint/libs/log"
 
+	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cmwaters/rook/x/rook/types"
 )
 
 type Keeper struct {
@@ -15,9 +15,9 @@ type Keeper struct {
 	storeKey sdk.StoreKey
 	memKey   sdk.StoreKey
 
-	games map[string]*types.GameState
+	games        map[string]*types.GameState
 	pendingGames map[string]*types.PendingGameState
-	players map[string]string
+	players      map[string]string
 }
 
 func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
@@ -61,7 +61,7 @@ func (k *Keeper) CheckPendingGames() {
 	for id, game := range k.pendingGames {
 		expired, quorum, players := game.Tick()
 		if expired && quorum {
-			k.games[id] = types.NewGameState(players, game.Config()) 
+			k.games[id] = types.NewGameState(players, game.Config())
 			for _, player := range players {
 				k.players[player.String()] = id
 			}
@@ -79,7 +79,7 @@ func (k Keeper) HandleBuildMessage(ctx sdk.Context, build types.MsgBuild) error 
 		game := k.games[gameId]
 		return game.Build(game.Players[build.Creator.String()], build.Settlement, build.Position)
 	}
-	return fmt.Errorf("Player with address %s is not involved in any game currently",build.Creator.String())
+	return fmt.Errorf("Player with address %s is not involved in any game currently", build.Creator.String())
 }
 
 func (k Keeper) HandleMoveMessage(ctx sdk.Context, move types.MsgMove) error {
@@ -87,5 +87,5 @@ func (k Keeper) HandleMoveMessage(ctx sdk.Context, move types.MsgMove) error {
 		game := k.games[gameId]
 		return game.Move(game.Players[move.Creator.String()], move.Quantity, move.Position, move.Direction)
 	}
-	return fmt.Errorf("Player with address %s is not involved in any game currently",move.Creator.String())
+	return fmt.Errorf("Player with address %s is not involved in any game currently", move.Creator.String())
 }

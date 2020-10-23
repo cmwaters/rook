@@ -1,7 +1,7 @@
 package cli
 
 // import (
-  
+
 // 	"github.com/spf13/cobra"
 
 //     "github.com/cosmos/cosmos-sdk/client"
@@ -18,7 +18,7 @@ package cli
 // 		RunE: func(cmd *cobra.Command, args []string) error {
 //       argsSettlement := string(args[0])
 //       argsPosition := string(args[1])
-      
+
 // 			clientCtx := client.GetClientContextFromCmd(cmd)
 // 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
 // 			if err != nil {

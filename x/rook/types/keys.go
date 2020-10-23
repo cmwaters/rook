@@ -18,13 +18,13 @@ const (
 )
 
 func KeyPrefix(p string) []byte {
-    return []byte(p)
+	return []byte(p)
 }
 
 const (
-	MoveKey= "Move"
+	MoveKey = "Move"
 )
 
 const (
-	BuildKey= "Build"
+	BuildKey = "Build"
 )

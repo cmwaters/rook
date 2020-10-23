@@ -4,23 +4,22 @@ import (
 	"net/http"
 	"strconv"
 
-    "github.com/cosmos/cosmos-sdk/client"
+	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cmwaters/rook/x/rook/types"
 )
 
 // Used to not have an error if strconv is unused
 var _ = strconv.Itoa(42)
 
 type createBuildRequest struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	Creator string `json:"creator"`
-	Settlement uint32 `json:"settlement"`
-	X uint32 `json:"x"`
-	Y uint32 `json:"y"`
-	
+	BaseReq    rest.BaseReq `json:"base_req"`
+	Creator    string       `json:"creator"`
+	Settlement uint32       `json:"settlement"`
+	X          uint32       `json:"x"`
+	Y          uint32       `json:"y"`
 }
 
 func createBuildHandler(clientCtx client.Context) http.HandlerFunc {
@@ -44,7 +43,7 @@ func createBuildHandler(clientCtx client.Context) http.HandlerFunc {
 
 		var parsedSettlement types.Settlement
 		switch req.Settlement {
-		case 1: 
+		case 1:
 			parsedSettlement = types.Settlement_TOWN
 		case 2:
 			parsedSettlement = types.Settlement_CITY
@@ -59,14 +58,13 @@ func createBuildHandler(clientCtx client.Context) http.HandlerFunc {
 		case 7:
 			parsedSettlement = types.Settlement_ROOK
 		}
-		
+
 		parsedPosition := types.Position{X: req.X, Y: req.Y}
-		
 
 		msg := types.NewMsgBuild(
 			creator,
 			parsedSettlement,
-			parsedPosition,	
+			parsedPosition,
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)

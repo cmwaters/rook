@@ -3,17 +3,17 @@ package rest
 import (
 	"github.com/gorilla/mux"
 
+	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/cosmos/cosmos-sdk/client"
-    "github.com/cmwaters/rook/x/rook/types"
 )
 
 const (
-    MethodGet = "GET"
+	MethodGet = "GET"
 )
 
 // RegisterRoutes registers rook-related REST handlers to a router
 func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
-    // this line is used by starport scaffolding # 2
+	// this line is used by starport scaffolding # 2
 	registerQueryRoutes(clientCtx, r)
 	registerTxHandlers(clientCtx, r)
 
@@ -23,17 +23,16 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 }
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
-    // this line is used by starport scaffolding # 3
-    r.HandleFunc("custom/rook/" + types.QueryListBuild, listBuildHandler(clientCtx)).Methods("GET")
+	// this line is used by starport scaffolding # 3
+	r.HandleFunc("custom/rook/"+types.QueryListBuild, listBuildHandler(clientCtx)).Methods("GET")
 
-    r.HandleFunc("custom/rook/" + types.QueryListMove, listMoveHandler(clientCtx)).Methods("GET")
+	r.HandleFunc("custom/rook/"+types.QueryListMove, listMoveHandler(clientCtx)).Methods("GET")
 
 }
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
-    // this line is used by starport scaffolding # 4
-    r.HandleFunc("/rook/build", createBuildHandler(clientCtx)).Methods("POST")
+	// this line is used by starport scaffolding # 4
+	r.HandleFunc("/rook/build", createBuildHandler(clientCtx)).Methods("POST")
 
-    r.HandleFunc("/rook/move", createMoveHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/rook/move", createMoveHandler(clientCtx)).Methods("POST")
 }
-

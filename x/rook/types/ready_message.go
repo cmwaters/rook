@@ -9,33 +9,33 @@ import (
 var _ sdk.Msg = &MsgReady{}
 
 func NewMsgReady(creator sdk.AccAddress, gameId string) *MsgReady {
-  return &MsgReady{
-    Id: uuid.New().String(),
-    Creator: creator,
-    GameId: gameId,
+	return &MsgReady{
+		Id:      uuid.New().String(),
+		Creator: creator,
+		GameId:  gameId,
 	}
 }
 
 func (msg *MsgReady) Route() string {
-  return RouterKey
+	return RouterKey
 }
 
 func (msg *MsgReady) Type() string {
-  return "Ready"
+	return "Ready"
 }
 
 func (msg *MsgReady) GetSigners() []sdk.AccAddress {
-  return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
 func (msg *MsgReady) GetSignBytes() []byte {
-  bz := ModuleCdc.MustMarshalJSON(msg)
-  return sdk.MustSortJSON(bz)
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgReady) ValidateBasic() error {
-  if msg.Creator.Empty() {
-    return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "creator can't be empty")
-  }
-  return nil
+	if msg.Creator.Empty() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "creator can't be empty")
+	}
+	return nil
 }

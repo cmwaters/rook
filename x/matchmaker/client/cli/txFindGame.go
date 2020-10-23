@@ -1,13 +1,12 @@
 package cli
 
 import (
-  
 	"github.com/spf13/cobra"
 
-    "github.com/cosmos/cosmos-sdk/client"
+	"github.com/cmwaters/rook/x/matchmaker/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 func CmdCreateFindGame() *cobra.Command {
@@ -16,9 +15,9 @@ func CmdCreateFindGame() *cobra.Command {
 		Short: "Creates a new findGame",
 		Args:  cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
-      argsGame := string(args[0])
-      argsOptions := string(args[1])
-      
+			argsGame := string(args[0])
+			argsOptions := string(args[1])
+
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
 			if err != nil {
@@ -35,5 +34,5 @@ func CmdCreateFindGame() *cobra.Command {
 
 	flags.AddTxFlagsToCmd(cmd)
 
-    return cmd
+	return cmd
 }

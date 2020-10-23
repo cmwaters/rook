@@ -3,10 +3,10 @@ package keeper
 import (
 	"context"
 
+	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/cmwaters/rook/x/rook/types"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -68,6 +68,3 @@ func (k Keeper) AllBuild(c context.Context, req *types.QueryAllBuildRequest) (*t
 
 	return &types.QueryAllBuildResponse{Build: builds, Pagination: pageRes}, nil
 }
-
-
-

@@ -9,36 +9,36 @@ import (
 var _ sdk.Msg = &MsgMove{}
 
 func NewMsgMove(creator sdk.AccAddress, quantity uint32, position Position, direction Direction) *MsgMove {
-  return &MsgMove{
-    Id: uuid.New().String(),
-		Creator: creator,
-    Quantity: quantity,
-    Position: &position,
-    Direction: direction,
+	return &MsgMove{
+		Id:        uuid.New().String(),
+		Creator:   creator,
+		Quantity:  quantity,
+		Position:  &position,
+		Direction: direction,
 	}
 }
 
 func (msg *MsgMove) Route() string {
-  return RouterKey
+	return RouterKey
 }
 
 func (msg *MsgMove) Type() string {
-  return "Move"
+	return "Move"
 }
 
 func (msg *MsgMove) GetSigners() []sdk.AccAddress {
-  return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
+	return []sdk.AccAddress{sdk.AccAddress(msg.Creator)}
 }
 
 func (msg *MsgMove) GetSignBytes() []byte {
-  bz := ModuleCdc.MustMarshalJSON(msg)
-  return sdk.MustSortJSON(bz)
+	bz := ModuleCdc.MustMarshalJSON(msg)
+	return sdk.MustSortJSON(bz)
 }
 
 func (msg *MsgMove) ValidateBasic() error {
-  if msg.Creator.Empty() {
-    return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "creator can't be empty")
-  }
+	if msg.Creator.Empty() {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "creator can't be empty")
+	}
 
-  return nil
+	return nil
 }

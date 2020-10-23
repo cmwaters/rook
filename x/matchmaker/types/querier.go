@@ -1,3 +1,5 @@
 package types
 
-const (QueryListFindGame = "list-findGame")
+const (
+	QueryListFindGame = "list-findGame"
+)

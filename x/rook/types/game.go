@@ -7,20 +7,20 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-const defaultCountdownBlocks = 50;
+const defaultCountdownBlocks = 50
 
 type GameState struct {
-	Map [][]Tile //x then y
-	Players map[string]*Faction
+	Map      [][]Tile //x then y
+	Players  map[string]*Faction
 	Factions []*Faction
-	Config *GameConfig
+	Config   *GameConfig
 }
 
 func NewGameState(players []*sdk.AccAddress, config *GameConfig) *GameState {
 	game := &GameState{
-		Players: make(map[string]*Faction, len(players)),
+		Players:  make(map[string]*Faction, len(players)),
 		Factions: make([]*Faction, len(players)),
-		Config: config,
+		Config:   config,
 	}
 	// create teams and initialize factions
 	game.initiatePlayers(players)
@@ -34,7 +34,7 @@ func NewGameState(players []*sdk.AccAddress, config *GameConfig) *GameState {
 }
 
 // TODO: create the random map generator algorithm
-func (g *GameState) GenerateMap()  {
+func (g *GameState) GenerateMap() {
 	// create a random generator from the seed
 	// randGen := rand.New(rand.NewSource(g.Config.Map.Seed))
 
@@ -43,7 +43,7 @@ func (g *GameState) GenerateMap()  {
 
 // InitiatePlayers creates a faction for each player
 //
-// In the future we will need to account for teams. 
+// In the future we will need to account for teams.
 func (g *GameState) initiatePlayers(players []*sdk.AccAddress) {
 	for idx, player := range players {
 		g.Factions[idx] = NewFaction(player.String())
@@ -53,8 +53,6 @@ func (g *GameState) initiatePlayers(players []*sdk.AccAddress) {
 
 // TODO: populate the map with the factions capital
 func (g *GameState) PopulateFactions() {
-
-
 
 }
 
@@ -69,13 +67,15 @@ func (g *GameState) Build(faction *Faction, settlement Settlement, position *Pos
 
 	// check that the faction occupies this piece of land
 	if g.Map[position.X][position.Y].Faction != faction {
-		return fmt.Errorf("faction %s does not occupy land (x: %d, y: %d)", 
+		return fmt.Errorf("faction %s does not occupy land (x: %d, y: %d)",
 			faction.Moniker, position.X, position.Y)
 	}
 
 	// check that the faction has the allocated resources
-	
-
+	if !ConstructionResources(g.Config.Construction, settlement).Less(faction.Resources) {
+		return fmt.Errorf("Not enough resources. Required: %s, got: %s",
+			ConstructionResources(g.Config.Construction, settlement), faction.Resources)
+	}
 
 	return nil
 }
@@ -84,11 +84,10 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 	return nil
 }
 
-
 type PendingGameState struct {
 	playerVotes map[string]bool
-	config  *GameConfig
-	gameID string
+	config      *GameConfig
+	gameID      string
 
 	total uint32
 	count uint32
@@ -102,15 +101,15 @@ func NewPendingGame(players []sdk.AccAddress, gameId string, config *GameConfig)
 	}
 	return &PendingGameState{
 		playerVotes: playerMap,
-		config: config,
-		gameID: gameId,
-		total: uint32(len(players)),
-		count: 0,
-		timer: defaultCountdownBlocks,
+		config:      config,
+		gameID:      gameId,
+		total:       uint32(len(players)),
+		count:       0,
+		timer:       defaultCountdownBlocks,
 	}
 }
 
-func (p *PendingGameState) Tick() (expired bool, ready bool, players []*sdk.AccAddress) { 
+func (p *PendingGameState) Tick() (expired bool, ready bool, players []*sdk.AccAddress) {
 	p.timer--
 	if p.timer == 0 {
 		ready, players := p.Quorum()
@@ -160,5 +159,3 @@ func (p *PendingGameState) Quorum() (bool, []*sdk.AccAddress) {
 func (p *PendingGameState) Config() *GameConfig {
 	return p.config
 }
-
-

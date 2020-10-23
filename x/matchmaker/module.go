@@ -11,15 +11,15 @@ import (
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"github.com/cmwaters/rook/x/matchmaker/client/cli"
+	"github.com/cmwaters/rook/x/matchmaker/client/rest"
+	"github.com/cmwaters/rook/x/matchmaker/keeper"
+	"github.com/cmwaters/rook/x/matchmaker/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cdctypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cmwaters/rook/x/matchmaker/keeper"
-	"github.com/cmwaters/rook/x/matchmaker/types"
-	"github.com/cmwaters/rook/x/matchmaker/client/cli"
-	"github.com/cmwaters/rook/x/matchmaker/client/rest"
 )
 
 var (
@@ -83,12 +83,12 @@ func (a AppModuleBasic) RegisterGRPCRoutes(_ client.Context, _ *runtime.ServeMux
 
 // GetTxCmd returns the capability module's root tx command.
 func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-    return cli.GetTxCmd()
+	return cli.GetTxCmd()
 }
 
 // GetQueryCmd returns the capability module's root query command.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-    return cli.GetQueryCmd(types.StoreKey)
+	return cli.GetQueryCmd(types.StoreKey)
 }
 
 // ----------------------------------------------------------------------------

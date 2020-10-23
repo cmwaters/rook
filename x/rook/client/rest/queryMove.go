@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cmwaters/rook/x/rook/types"
 )
 
 func listMoveHandler(clientCtx client.Context) http.HandlerFunc {

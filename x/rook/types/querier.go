@@ -1,5 +1,9 @@
 package types
 
-const (QueryListMove = "list-move")
+const (
+	QueryListMove = "list-move"
+)
 
-const (QueryListBuild = "list-build")
+const (
+	QueryListBuild = "list-build"
+)

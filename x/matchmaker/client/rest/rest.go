@@ -3,12 +3,12 @@ package rest
 import (
 	"github.com/gorilla/mux"
 
-	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cmwaters/rook/x/matchmaker/types"
+	"github.com/cosmos/cosmos-sdk/client"
 )
 
 const (
-    MethodGet = "GET"
+	MethodGet = "GET"
 )
 
 // RegisterRoutes registers matchmaker-related REST handlers to a router
@@ -21,13 +21,12 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 3
-    r.HandleFunc("custom/matchmaker/" + types.QueryListFindGame, listFindGameHandler(clientCtx)).Methods("GET")
+	r.HandleFunc("custom/matchmaker/"+types.QueryListFindGame, listFindGameHandler(clientCtx)).Methods("GET")
 
 }
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
-    r.HandleFunc("/matchmaker/findGame", createFindGameHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/matchmaker/findGame", createFindGameHandler(clientCtx)).Methods("POST")
 
 }
-

@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/cmwaters/rook/x/matchmaker/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 func listFindGameHandler(clientCtx client.Context) http.HandlerFunc {

@@ -3,9 +3,9 @@ package matchmaker
 import (
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cmwaters/rook/x/matchmaker/keeper"
 	"github.com/cmwaters/rook/x/matchmaker/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
@@ -16,8 +16,8 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		// this line is used by starport scaffolding # 1
-case *types.MsgFindGame:
-return handleMsgCreateFindGame(ctx, k, msg)
+		case *types.MsgFindGame:
+			return handleMsgCreateFindGame(ctx, k, msg)
 		default:
 			errMsg := fmt.Sprintf("unrecognized %s message type: %T", types.ModuleName, msg)
 			return nil, sdkerrors.Wrap(sdkerrors.ErrUnknownRequest, errMsg)

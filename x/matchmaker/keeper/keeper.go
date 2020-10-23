@@ -5,9 +5,9 @@ import (
 
 	"github.com/tendermint/tendermint/libs/log"
 
+	"github.com/cmwaters/rook/x/matchmaker/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 type (

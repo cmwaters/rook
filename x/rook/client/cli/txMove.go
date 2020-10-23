@@ -1,7 +1,7 @@
 package cli
 
 // import (
-  
+
 // 	"github.com/spf13/cobra"
 
 //     "github.com/cosmos/cosmos-sdk/client"
@@ -19,7 +19,7 @@ package cli
 //       argsQuantity := string(args[0])
 //       argsFrom := string(args[1])
 //       argsTo := string(args[2])
-      
+
 // 			clientCtx := client.GetClientContextFromCmd(cmd)
 // 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
 // 			if err != nil {

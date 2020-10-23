@@ -10,9 +10,9 @@ const (
 
 func NewFaction(name string) *Faction {
 	return &Faction{
-		Moniker:    name,
-		Resources: NewResourceSet(),
-		Population: make(map[uint32]uint32),
+		Moniker:     name,
+		Resources:   NewResourceSet(),
+		Population:  make(map[uint32]uint32),
 		Settlements: make(map[uint32]Settlement),
 	}
 }
@@ -47,6 +47,27 @@ func (f *Faction) Reap() {
 
 func NewResourceSet() *ResourceSet {
 	return &ResourceSet{Wood: 0, Food: 0, Stone: 0}
+}
+
+func ConstructionResources(config *SettlementCostsConfig, settlement Settlement) *ResourceSet {
+	switch settlement {
+	case Settlement_TOWN:
+		return config.Town
+	case Settlement_CITY:
+		return config.City
+	case Settlement_CAPITAL:
+		return config.Capital
+	case Settlement_FARM:
+		return config.Farm
+	case Settlement_QUARRY:
+		return config.Quarry
+	case Settlement_LUMBERMILL:
+		return config.Lumbermill
+	case Settlement_ROOK:
+		return config.Rook
+	default:
+		return NewResourceSet()
+	}
 }
 
 func (r *ResourceSet) Less(r2 *ResourceSet) bool {

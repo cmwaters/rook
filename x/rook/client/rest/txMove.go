@@ -4,23 +4,22 @@ import (
 	"net/http"
 	"strconv"
 
-    "github.com/cosmos/cosmos-sdk/client"
+	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cmwaters/rook/x/rook/types"
 )
 
 // Used to not have an error if strconv is unused
 var _ = strconv.Itoa(42)
 
 type createMoveRequest struct {
-	BaseReq rest.BaseReq `json:"base_req"`
-	Creator string `json:"creator"`
-	Quantity uint32 `json:"quantity"`
-	From types.Position `json:"from"`
-	To types.Direction `json:"to"`
-	
+	BaseReq  rest.BaseReq    `json:"base_req"`
+	Creator  string          `json:"creator"`
+	Quantity uint32          `json:"quantity"`
+	From     types.Position  `json:"from"`
+	To       types.Direction `json:"to"`
 }
 
 func createMoveHandler(clientCtx client.Context) http.HandlerFunc {
@@ -42,20 +41,17 @@ func createMoveHandler(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		
 		parsedQuantity := req.Quantity
-		
+
 		parsedFrom := req.From
-		
+
 		parsedTo := req.To
-		
 
 		msg := types.NewMsgMove(
 			creator,
 			parsedQuantity,
 			parsedFrom,
 			parsedTo,
-			
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)

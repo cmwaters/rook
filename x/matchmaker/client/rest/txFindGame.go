@@ -4,11 +4,11 @@ import (
 	"net/http"
 	"strconv"
 
-    "github.com/cosmos/cosmos-sdk/client"
+	"github.com/cmwaters/rook/x/matchmaker/types"
+	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 // Used to not have an error if strconv is unused
@@ -16,10 +16,9 @@ var _ = strconv.Itoa(42)
 
 type createFindGameRequest struct {
 	BaseReq rest.BaseReq `json:"base_req"`
-	Creator string `json:"creator"`
-	Game string `json:"game"`
-	Options string `json:"options"`
-	
+	Creator string       `json:"creator"`
+	Game    string       `json:"game"`
+	Options string       `json:"options"`
 }
 
 func createFindGameHandler(clientCtx client.Context) http.HandlerFunc {
@@ -40,17 +39,15 @@ func createFindGameHandler(clientCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
 		}
-		
+
 		parsedGame := req.Game
-		
+
 		parsedOptions := req.Options
-		
 
 		msg := types.NewMsgFindGame(
 			creator,
 			parsedGame,
 			parsedOptions,
-			
 		)
 
 		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
