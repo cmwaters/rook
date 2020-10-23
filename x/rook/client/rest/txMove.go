@@ -17,9 +17,9 @@ var _ = strconv.Itoa(42)
 type createMoveRequest struct {
 	BaseReq rest.BaseReq `json:"base_req"`
 	Creator string `json:"creator"`
-	Quantity string `json:"quantity"`
-	From string `json:"from"`
-	To string `json:"to"`
+	Quantity uint32 `json:"quantity"`
+	From types.Position `json:"from"`
+	To types.Direction `json:"to"`
 	
 }
 

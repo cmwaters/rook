@@ -1,6 +1,7 @@
 package types
 
 import (
+	"fmt"
 	// "math/rand"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -9,7 +10,7 @@ import (
 const defaultCountdownBlocks = 50;
 
 type GameState struct {
-	Map [][]Tile
+	Map [][]Tile //x then y
 	Players map[string]*Faction
 	Factions []*Faction
 	Config *GameConfig
@@ -57,6 +58,32 @@ func (g *GameState) PopulateFactions() {
 
 }
 
+func (g *GameState) Build(faction *Faction, settlement Settlement, position *Position) error {
+	// validate position
+	if position.X >= g.Config.Map.Width {
+		return fmt.Errorf("Position X (%d) exceeds game boundaries (%d)", position.X, g.Config.Map.Width)
+	}
+	if position.Y >= g.Config.Map.Height {
+		return fmt.Errorf("Position Y (%d) exceeds game boundaries (%d)", position.Y, g.Config.Map.Height)
+	}
+
+	// check that the faction occupies this piece of land
+	if g.Map[position.X][position.Y].Faction != faction {
+		return fmt.Errorf("faction %s does not occupy land (x: %d, y: %d)", 
+			faction.Moniker, position.X, position.Y)
+	}
+
+	// check that the faction has the allocated resources
+	
+
+
+	return nil
+}
+
+func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, direction Direction) error {
+	return nil
+}
+
 
 type PendingGameState struct {
 	playerVotes map[string]bool
@@ -83,12 +110,13 @@ func NewPendingGame(players []sdk.AccAddress, gameId string, config *GameConfig)
 	}
 }
 
-func (p *PendingGameState) Tick() (bool, []*sdk.AccAddress) { 
+func (p *PendingGameState) Tick() (expired bool, ready bool, players []*sdk.AccAddress) { 
 	p.timer--
 	if p.timer == 0 {
-		return p.Quorum()
+		ready, players := p.Quorum()
+		return true, ready, players
 	}
-	return false, nil
+	return false, false, nil
 }
 
 func (p *PendingGameState) AddVote(player *sdk.AccAddress) bool {

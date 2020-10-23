@@ -21,11 +21,9 @@ message Tile {
 
 message Faction {
   string moniker = 1;
-  uint32 food = 2;
-  uint32 wood = 3;
-  uint32 stone = 4;
-  map<uint32, uint32> population = 5;
-  map<uint32, Settlement> settlements = 6;
+  ResourceSet resources = 2;
+  map<uint32, uint32> population = 3;
+  map<uint32, Settlement> settlements = 4;
 }
 
 enum Landscape {

@@ -11,9 +11,7 @@ const (
 func NewFaction(name string) *Faction {
 	return &Faction{
 		Moniker:    name,
-		Food:       0,
-		Wood:       0,
-		Stone:      0,
+		Resources: NewResourceSet(),
 		Population: make(map[uint32]uint32),
 		Settlements: make(map[uint32]Settlement),
 	}
@@ -36,13 +34,21 @@ func (f *Faction) Reap() {
 				f.Population[position] = cityPopulationRate
 			}
 		case Settlement_LUMBERMILL:
-			f.Wood += lumbermillProductionRate
+			f.Resources.Wood += lumbermillProductionRate
 		case Settlement_QUARRY:
-			f.Wood += quarryProductionRate
+			f.Resources.Stone += quarryProductionRate
 		case Settlement_FARM:
-			f.Food += farmProductionRate
+			f.Resources.Food += farmProductionRate
 		default: // Rooks for example don't produce anything
 			continue
 		}
 	}
+}
+
+func NewResourceSet() *ResourceSet {
+	return &ResourceSet{Wood: 0, Food: 0, Stone: 0}
+}
+
+func (r *ResourceSet) Less(r2 *ResourceSet) bool {
+	return r.Wood < r2.Wood && r.Food < r2.Food && r.Stone < r2.Stone
 }

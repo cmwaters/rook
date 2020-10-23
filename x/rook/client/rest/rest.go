@@ -35,6 +35,5 @@ func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
     r.HandleFunc("/rook/build", createBuildHandler(clientCtx)).Methods("POST")
 
     r.HandleFunc("/rook/move", createMoveHandler(clientCtx)).Methods("POST")
-
 }
 

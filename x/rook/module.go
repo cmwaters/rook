@@ -129,7 +129,7 @@ func (AppModule) QuerierRoute() string { return "" }
 
 // LegacyQuerierHandler returns the capability module's Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return func(ctx Context, path []string, req abci.RequestQuery) ([]byte, error) { return []byte{}, errors.New("legacyQuerierHandler not implemented") }
+	return func(ctx sdk.Context, path []string, req abci.RequestQuery) ([]byte, error) { return []byte{}, errors.New("legacyQuerierHandler not implemented") }
 }
 
 // RegisterQueryService registers a GRPC query service to respond to the
@@ -165,5 +165,7 @@ func (am AppModule) BeginBlock(_ sdk.Context, _ abci.RequestBeginBlock) {}
 // EndBlock executes all ABCI EndBlock logic respective to the capability module. It
 // returns no validator updates.
 func (am AppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
+	// steps through timer for each pending game. If ready begins game
+	am.keeper.CheckPendingGames()
 	return []abci.ValidatorUpdate{}
 }
