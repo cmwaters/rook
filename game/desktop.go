@@ -12,13 +12,17 @@ const (
 )
 
 // RookDesktop implements ebiten.Game interface.
-type RookDesktop struct{
-	views map[string]View // the desktop switches between multiple views
+type RookDesktop struct {
+	ScreenWidth, ScreenHeight int
+
+	views   map[string]View // the desktop switches between multiple views
 	current View
 }
 
 func NewRookDesktop() *RookDesktop {
 	r := &RookDesktop{
+		ScreenWidth: 640,
+		ScreenHeight: 480,
 		views: map[string]View{
 			gameView: NewGameView(),
 		},
@@ -52,7 +56,7 @@ func (r *RookDesktop) Draw(screen *ebiten.Image) {
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
 // If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (r *RookDesktop) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
-	return 320, 240
+	return r.ScreenWidth, r.ScreenHeight
 }
 
 func (r *RookDesktop) changeView(viewStr string) error {
@@ -62,5 +66,3 @@ func (r *RookDesktop) changeView(viewStr string) error {
 	}
 	return fmt.Errorf("view %s not found", viewStr)
 }
-
-

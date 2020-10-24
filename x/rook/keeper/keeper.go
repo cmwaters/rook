@@ -79,7 +79,9 @@ func (k *Keeper) CheckPendingGames() {
 }
 
 func (k Keeper) UpdateGames() {
-	
+	for _, game := range k.games {
+		game.UpdateResources()
+	}
 }
 
 func (k Keeper) HandleBuildMessage(ctx sdk.Context, build types.MsgBuild) error {

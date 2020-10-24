@@ -107,6 +107,12 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 	return nil
 }
 
+func (g *GameState) UpdateResources() {
+	for _, faction := range g.Factions {
+		faction.Reap(g.Config.Production)
+	}
+}
+
 var directions = []Direction{Direction_LEFT, Direction_RIGHT, Direction_UP, Direction_DOWN}
 
 func (g *GameState) searchAdjacent(position *Position, condition func(*Tile) bool) []*Tile {
