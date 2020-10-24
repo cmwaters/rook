@@ -19,5 +19,5 @@ func (g *GameView) Update(views map[string]View) (View, error) {
 }
 
 func (g *GameView) Draw(screen *ebiten.Image) {
-
+	
 }

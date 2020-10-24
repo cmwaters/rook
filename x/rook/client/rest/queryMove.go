@@ -11,7 +11,7 @@ import (
 
 func listMoveHandler(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		res, height, err := clientCtx.QueryWithData(fmt.Sprintf("custom/%s/list-move", types.QuerierRoute), nil)
+		res, height, err := clientCtx.QueryWithData(fmt.Sprintf("/custom/%s/list-move", types.QuerierRoute), nil)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
 			return

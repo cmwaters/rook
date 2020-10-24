@@ -18,7 +18,7 @@ func NewFaction(name string) *Faction {
 }
 
 // Reap takes a Factions structures and accumulates all the resources accrued in that turn
-func (f *Faction) Reap() {
+func (f *Faction) Reap(config *ProductionRatesConfig) {
 	for position, settlement := range f.Settlements {
 		switch settlement {
 		case Settlement_TOWN:

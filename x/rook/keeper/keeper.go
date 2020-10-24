@@ -78,6 +78,10 @@ func (k *Keeper) CheckPendingGames() {
 	}
 }
 
+func (k Keeper) UpdateGames() {
+	
+}
+
 func (k Keeper) HandleBuildMessage(ctx sdk.Context, build types.MsgBuild) error {
 	if gameId, ok := k.players[build.Creator.String()]; ok {
 		game := k.games[gameId]
