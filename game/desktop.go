@@ -2,7 +2,9 @@ package game
 
 import (
 	"fmt"
+	"math/rand"
 
+	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/hajimehoshi/ebiten"
 )
 
@@ -20,11 +22,13 @@ type RookDesktop struct {
 }
 
 func NewRookDesktop() *RookDesktop {
+	config := types.DefaultGameConfig()
+	config.AddSeed(rand.Int63()) // this will just be used from local games
 	r := &RookDesktop{
 		ScreenWidth: 640,
 		ScreenHeight: 480,
 		views: map[string]View{
-			gameView: NewGameView(),
+			gameView: NewGameView(config),
 		},
 	}
 	// start with game view (in the future we will start with the menu)
@@ -56,6 +60,7 @@ func (r *RookDesktop) Draw(screen *ebiten.Image) {
 // Layout takes the outside size (e.g., the window size) and returns the (logical) screen size.
 // If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (r *RookDesktop) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	r.ScreenWidth, r.ScreenHeight = outsideWidth, outsideHeight
 	return r.ScreenWidth, r.ScreenHeight
 }
 

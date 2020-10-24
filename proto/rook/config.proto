@@ -6,7 +6,7 @@ option go_package = "github.com/cmwaters/rook/x/rook/types";
 import "rook/state.proto";
 
 message GameConfig {
-  uint32 initialTeams = 1;
+  InitializationConfig initial = 1;
   MapConfig map = 2; 
   ProductionRatesConfig production = 3;
   SettlementCostsConfig construction = 4;
@@ -15,7 +15,9 @@ message GameConfig {
 message MapConfig {
   uint32 width = 1;
   uint32 height = 2;
-  int64 seed = 3;
+  uint32 line_of_sight = 3;
+  uint32 rook_line_of_sight = 4;
+  int64 seed = 5;
 }
 
 message ProductionRatesConfig {
@@ -35,5 +37,10 @@ message SettlementCostsConfig {
   ResourceSet lumbermill = 5;
   ResourceSet quarry = 6;
   ResourceSet rook = 7;
+}
+
+message InitializationConfig {
+  uint32 teams = 1;
+  ResourceSet resources = 2; 
 }
 
