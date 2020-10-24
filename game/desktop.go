@@ -6,7 +6,7 @@ import (
 
 // RookDesktop implements ebiten.Game interface.
 type RookDesktop struct{
-	Screens map[string]*View
+	Screens map[string]*View // the desktop switches between multiple views
 }
 
 func NewRookDesktop() *RookDesktop {

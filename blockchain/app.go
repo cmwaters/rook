@@ -11,7 +11,7 @@ import (
 	tmos "github.com/tendermint/tendermint/libs/os"
 	dbm "github.com/tendermint/tm-db"
 
-	appparams "github.com/cmwaters/rook/app/params"
+	appparams "github.com/cmwaters/rook/blockchain/params"
 	"github.com/cmwaters/rook/x/rook"
 	rookkeeper "github.com/cmwaters/rook/x/rook/keeper"
 	rooktypes "github.com/cmwaters/rook/x/rook/types"

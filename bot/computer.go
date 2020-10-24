@@ -1,5 +1,9 @@
 package bot
 
+import (
+	"github.com/cmwaters/rook/x/rook/types"
+)
+
 var _ Bot = &Computer{}
 
 type Computer struct {
