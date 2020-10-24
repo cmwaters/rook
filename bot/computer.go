@@ -7,10 +7,10 @@ import (
 var _ Bot = &Computer{}
 
 type Computer struct {
-	Map []types.Tile // 2D map is serialized (makes it easier to read UpdatedTiles)
+	Map     []types.Tile // 2D map is serialized (makes it easier to read UpdatedTiles)
 	Faction types.Faction
-	Config types.GameConfig
-	Step uint32
+	Config  types.GameConfig
+	Step    uint32
 }
 
 func NewComputer() *Computer {
@@ -30,7 +30,6 @@ func (c *Computer) Update(req UpdateRequest) UpdateResponse {
 	return UpdateResponse{}
 }
 
-
 func EmptyMap(width, height uint32) []types.Tile {
 	gameMap := make([]types.Tile, width*height)
 	for index := uint32(0); index < (width * height); index++ {
@@ -40,9 +39,9 @@ func EmptyMap(width, height uint32) []types.Tile {
 }
 
 func EmptyTile() types.Tile {
-	return types.Tile {
-		Landscape: types.Landscape_L_UNKNOWN,
+	return types.Tile{
+		Landscape:  types.Landscape_L_UNKNOWN,
 		Population: 0,
-		Faction: nil,
+		Faction:    nil,
 	}
 }

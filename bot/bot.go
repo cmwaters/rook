@@ -5,12 +5,12 @@ import (
 )
 
 type Bot interface {
-	Init(InitRequest) 
+	Init(InitRequest)
 	Update(UpdateRequest) UpdateResponse
 }
 
 type InitRequest struct {
-	Config types.GameConfig
+	Config  types.GameConfig
 	Faction types.Faction
 }
 
@@ -19,8 +19,6 @@ type UpdateRequest struct {
 }
 
 type UpdateResponse struct {
-	Moves []*types.MsgMove
+	Moves  []*types.MsgMove
 	Builds []*types.MsgBuild
 }
-
-

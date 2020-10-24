@@ -85,7 +85,7 @@ func (g *GameState) Build(faction *Faction, settlement Settlement, position *Pos
 	}
 
 	// A quarry must be built adjacent to at least one mountain range
-	isQuarry := func (tile *Tile) bool { return tile.Landscape == Landscape_MOUNTAINS}
+	isQuarry := func(tile *Tile) bool { return tile.Landscape == Landscape_MOUNTAINS }
 	if settlement == Settlement_QUARRY && len(g.searchAdjacent(position, isQuarry)) == 0 {
 		return errors.New("building a quarry must be adjacent to mountains")
 	}
@@ -124,24 +124,24 @@ func (g *GameState) neighborTile(position *Position, direction Direction) *Tile 
 	switch direction {
 	case Direction_LEFT:
 		if position.X == 0 {
-			return &g.Map[g.Config.Map.Width - 1][position.Y]
+			return &g.Map[g.Config.Map.Width-1][position.Y]
 		}
-		return &g.Map[position.X - 1][position.Y]
+		return &g.Map[position.X-1][position.Y]
 	case Direction_RIGHT:
-		if position.X == g.Config.Map.Width - 1 {
+		if position.X == g.Config.Map.Width-1 {
 			return &g.Map[0][position.Y]
 		}
-		return &g.Map[position.X + 1][position.Y]
+		return &g.Map[position.X+1][position.Y]
 	case Direction_UP:
-		if position.Y == g.Config.Map.Height - 1 {
+		if position.Y == g.Config.Map.Height-1 {
 			return &g.Map[position.X][0]
 		}
-		return &g.Map[position.X][position.Y + 1]
+		return &g.Map[position.X][position.Y+1]
 	case Direction_DOWN:
 		if position.X == 0 {
-			return &g.Map[position.X][g.Config.Map.Height - 1]
+			return &g.Map[position.X][g.Config.Map.Height-1]
 		}
-		return &g.Map[position.X][position.Y - 1]
+		return &g.Map[position.X][position.Y-1]
 	default: //unknown direction
 		return nil
 	}

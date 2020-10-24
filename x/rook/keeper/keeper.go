@@ -26,9 +26,9 @@ func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
 		storeKey: storeKey,
 		memKey:   memKey,
 
-		games: make(map[string]*types.GameState),
+		games:        make(map[string]*types.GameState),
 		pendingGames: make(map[string]*types.PendingGameState),
-		players: make(map[string]string),
+		players:      make(map[string]string),
 	}
 }
 
