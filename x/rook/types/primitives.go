@@ -11,5 +11,5 @@ func (p *Position) Wrap(c *MapConfig) {
 }
 
 func (p *Position) Index(c *MapConfig) uint32 {
-	
+	return p.Y * c.Width + p.X
 }

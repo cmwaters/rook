@@ -73,3 +73,9 @@ func ConstructionResources(config *SettlementCostsConfig, settlement Settlement)
 func (r *ResourceSet) Less(r2 *ResourceSet) bool {
 	return r.Wood < r2.Wood && r.Food < r2.Food && r.Stone < r2.Stone
 }
+
+func (r *ResourceSet) Subtract(r2 *ResourceSet) {
+	r.Wood -= r2.Wood
+	r.Food -= r2.Food
+	r.Stone -= r2.Stone
+}

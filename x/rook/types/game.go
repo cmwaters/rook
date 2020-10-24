@@ -97,6 +97,8 @@ func (g *GameState) Build(faction *Faction, settlement Settlement, position *Pos
 
 	// we are good to build the settlement
 	faction.Settlements[position.Index(g.Config.Map)] = settlement
+	// and remove the resources from the faction
+	faction.Resources.Subtract(ConstructionResources(g.Config.Construction, settlement))
 
 	return nil
 }

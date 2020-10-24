@@ -171,9 +171,9 @@ type App struct {
 	ScopedIBCKeeper      capabilitykeeper.ScopedKeeper
 	ScopedTransferKeeper capabilitykeeper.ScopedKeeper
 
-	rookKeeper rookkeeper.Keeper
+	RookKeeper rookkeeper.Keeper
 	// this line is used by starport scaffolding # stargate/app/keeperDeclaration
-	matchmakerKeeper matchmakerkeeper.Keeper
+	MatchmakerKeeper matchmakerkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -302,12 +302,12 @@ func New(
 	// If evidence needs to be handled for the app, set routes in router here and seal
 	app.EvidenceKeeper = *evidenceKeeper
 
-	app.rookKeeper = *rookkeeper.NewKeeper(
+	app.RookKeeper = *rookkeeper.NewKeeper(
 		appCodec, keys[rooktypes.StoreKey], keys[rooktypes.MemStoreKey],
 	)
 
 	// this line is used by starport scaffolding # stargate/app/keeperDefinition
-	app.matchmakerKeeper = *matchmakerkeeper.NewKeeper(
+	app.MatchmakerKeeper = *matchmakerkeeper.NewKeeper(
 		appCodec,
 		keys[matchmakertypes.StoreKey],
 		keys[matchmakertypes.MemStoreKey],
@@ -336,9 +336,9 @@ func New(
 		ibc.NewAppModule(app.IBCKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		transferModule,
-		rook.NewAppModule(appCodec, app.rookKeeper),
+		rook.NewAppModule(appCodec, app.RookKeeper),
 		// this line is used by starport scaffolding # stargate/app/appModule
-		matchmaker.NewAppModule(appCodec, app.matchmakerKeeper),
+		matchmaker.NewAppModule(appCodec, app.MatchmakerKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
