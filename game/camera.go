@@ -21,16 +21,16 @@ func NewCamera(x, y, gain, speed float64) *Camera {
 func (c *Camera) ParseMovementKeys() {
 	diffX, diffY := 0.0, 0.0
 	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		diffY -= c.speed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		diffX -= c.speed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyS) {
 		diffY += c.speed
 	}
-	if ebiten.IsKeyPressed(ebiten.KeyD) {
+	if ebiten.IsKeyPressed(ebiten.KeyA) {
 		diffX += c.speed
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyS) {
+		diffY -= c.speed
+	}
+	if ebiten.IsKeyPressed(ebiten.KeyD) {
+		diffX -= c.speed
 	}
 	// adjust if diagonal
 	if diffX != 0 && diffY != 0 {

@@ -28,7 +28,7 @@ func NewRookDesktop() *RookDesktop {
 		ScreenWidth: 640,
 		ScreenHeight: 480,
 		views: map[string]View{
-			gameView: NewGameView(config),
+			gameView: NewLocalGameView(config, 3),
 		},
 	}
 	// start with game view (in the future we will start with the menu)
