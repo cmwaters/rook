@@ -17,6 +17,7 @@ message Tile {
   Landscape landscape = 1;
   uint32 population = 2;
   Faction faction = 3;
+  Settlement settlement = 4;
 }
 
 message Faction {
@@ -27,7 +28,7 @@ message Faction {
 }
 
 enum Landscape {
-  L_UNKNOWN = 0; // has to be unique 
+  UNKNOWN = 0; // has to be unique 
   PLAINS = 1;
   FOREST = 2;
   MOUNTAINS = 3;
@@ -35,7 +36,7 @@ enum Landscape {
 }
 
 enum Settlement {
-  S_UNKNOWN = 0; // has to be unique
+  NONE = 0; // has to be unique
   TOWN = 1;
   CITY = 2;
   CAPITAL = 3;

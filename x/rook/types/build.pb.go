@@ -82,7 +82,7 @@ func (m *MsgBuild) GetSettlement() Settlement {
 	if m != nil {
 		return m.Settlement
 	}
-	return Settlement_S_UNKNOWN
+	return Settlement_NONE
 }
 
 func (m *MsgBuild) GetPosition() *Position {

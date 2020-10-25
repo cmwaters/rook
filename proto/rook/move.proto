@@ -19,7 +19,7 @@ message Position {
 }
 
 enum Direction {
-  D_UNKNOWN = 0;
+  NOWHERE = 0;
   DOWN = 1;
   LEFT = 2;
   RIGHT = 3;
