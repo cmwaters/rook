@@ -1,13 +1,20 @@
 package types
 
-
 func GenerateMap(config *MapConfig) [][]Tile {
 	// TODO: actually create a map
 	return NewEmptyBoard(config)
 }
 
 func PopulateFactions(gameMap *[][]Tile, factions []*Faction, config *MapConfig) {
+	// TODO: populate an existing map with the capital cities of each faction
+}
 
+// GetVisibleTilesFromMap loops through the position of all population and returns the visible tiles
+//
+// TODO: in the future we should only take the delta based on the movements that the player took
+// in that turn.
+func GetVisibleTilesFromMap(gameMap [][]Tile, faction Faction) map[uint32]*Tile {
+	return make(map[uint32]*Tile)
 }
 
 func NewEmptyBoard(config *MapConfig) [][]Tile {

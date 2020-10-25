@@ -87,6 +87,12 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 	return nil
 }
 
+// assesses if someone has won and if so which faction
+func (g *GameState) Victor() *Faction {
+
+	return nil
+}
+
 func (g *GameState) UpdateResources() {
 	for _, faction := range g.Factions {
 		faction.Reap(g.Config.Production)
@@ -138,8 +144,7 @@ func (g *GameState) neighborTile(position *Position, direction Direction) *Tile 
 // In the future we will need to account for teams.
 func (g *GameState) initiatePlayers(players []*sdk.AccAddress) {
 	for idx, player := range players {
-		g.Factions[idx] = NewFaction(player.String())
+		g.Factions[idx] = NewFaction(player.String(), *g.Config.Initial)
 		g.Players[player.String()] = g.Factions[idx]
 	}
 }
-

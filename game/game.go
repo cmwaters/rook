@@ -9,29 +9,30 @@ import (
 var _ View = &GameView{}
 
 var (
-	tileWidth				= 64
-	tileHeight			= 64
-	tileMargin		 	= 2
+	tileWidth  = 64
+	tileHeight = 64
+	tileMargin = 2
 )
-
 
 type GameView struct {
 	mapImage *ebiten.Image
-	camera *Camera
-	board [][]types.Tile // this represents the players known map
-	config *types.GameConfig
-	op *ebiten.DrawImageOptions
-	engine e.GameEngine
+	camera   *Camera
+	resources *types.ResourceSet
+	board    [][]types.Tile // this represents the players known map
+	config   *types.GameConfig
+	op       *ebiten.DrawImageOptions
+	engine   e.GameEngine
 }
 
 func NewLocalGameView(config *types.GameConfig, bots int) *GameView {
 	g := &GameView{
 		mapImage: NewMapImage(config.Map),
-		camera: NewCamera(0, 0, 0.3, 5),
-		config: config,
-		board: types.NewEmptyBoard(config.Map),
-		op: &ebiten.DrawImageOptions{},
-		engine: e.NewLocalGameEngine(config, bots),
+		camera:   NewCamera(0, 0, 0.3, 5),
+		config:   config,
+		resources: types.NewResourceSet(config.Initial.Resources),
+		board:    types.NewEmptyBoard(config.Map),
+		op:       &ebiten.DrawImageOptions{},
+		engine:   e.NewLocalGameEngine(config, bots),
 	}
 	statec := make(chan *types.PartialState)
 	g.engine.Init(statec)
@@ -59,18 +60,25 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 }
 
 func (g *GameView) ApplyStateTransitions(c chan *types.PartialState) {
-	for {
-
+	for stateUpdate := range c {
+		// update map first
+		for posIdx, tile := range stateUpdate.Map {
+			x, y := IndexToCoordinate(posIdx, g.config.Map.Width)
+			g.board[x][y] = *tile
+		} 
+		// update resources
+		g.resources = stateUpdate.Resources
 	}
 }
 
-
-
-
 func NewMapImage(config *types.MapConfig) *ebiten.Image {
-	width := tileMargin + int(config.Width) * (tileWidth + tileMargin)
-	height := tileMargin + int(config.Height) * (tileHeight + tileMargin)
+	width := tileMargin + int(config.Width)*(tileWidth+tileMargin)
+	height := tileMargin + int(config.Height)*(tileHeight+tileMargin)
 	image, _ := ebiten.NewImage(width, height, ebiten.FilterDefault)
 	image.Fill(shadowColor)
 	return image
+}
+
+func IndexToCoordinate(index, width uint32) (x, y int) {
+	return int(index % width), int(index / width)
 }

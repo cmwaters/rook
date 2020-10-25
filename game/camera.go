@@ -10,8 +10,8 @@ const scrollSensitivityFactor = 4
 
 type Camera struct {
 	posX, posY, targetX, targetY float64
-	pGain float64
-	speed float64
+	pGain                        float64
+	speed                        float64
 }
 
 func NewCamera(x, y, gain, speed float64) *Camera {
@@ -38,7 +38,7 @@ func (c *Camera) ParseMovementKeys() {
 		diffY /= math.Sqrt(2)
 	}
 	// check scrolling
-	if diffX == 0 && diffY == 0 { 
+	if diffX == 0 && diffY == 0 {
 		x, y := ebiten.Wheel()
 		if ebiten.IsKeyPressed(ebiten.KeyShift) {
 			x, y = y, x // swap them

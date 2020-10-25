@@ -8,10 +8,10 @@ const (
 	farmProductionRate       = 1
 )
 
-func NewFaction(name string) *Faction {
+func NewFaction(name string, config InitializationConfig) *Faction {
 	return &Faction{
 		Moniker:     name,
-		Resources:   NewResourceSet(),
+		Resources:   NewResourceSet(config.Resources),
 		Population:  make(map[uint32]uint32),
 		Settlements: make(map[uint32]Settlement),
 	}
@@ -45,8 +45,8 @@ func (f *Faction) Reap(config *ProductionRatesConfig) {
 	}
 }
 
-func NewResourceSet() *ResourceSet {
-	return &ResourceSet{Wood: 0, Food: 0, Stone: 0}
+func NewResourceSet(r *ResourceSet) *ResourceSet {
+	return &ResourceSet{Wood: r.Wood, Food: r.Food, Stone: r.Stone}
 }
 
 func ConstructionResources(config *SettlementCostsConfig, settlement Settlement) *ResourceSet {
@@ -66,7 +66,7 @@ func ConstructionResources(config *SettlementCostsConfig, settlement Settlement)
 	case Settlement_ROOK:
 		return config.Rook
 	default:
-		return NewResourceSet()
+		return &ResourceSet{0,0,0}
 	}
 }
 

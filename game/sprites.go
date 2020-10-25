@@ -8,20 +8,19 @@ import (
 var (
 	//landscapes
 	capitalSprite,
-	citySprite, 
+	citySprite,
 	farmSprite,
 	forestSprite,
-	lakeSprite, 
+	lakeSprite,
 	lumbermillSprite,
 	mountainsSprite,
 	plainsSprite,
 	quarrySprite,
 	rookSprite,
 	townSprite *ebiten.Image
-
 )
 
-func init() { 
+func init() {
 	var err error
 	farmSprite, _, err = util.NewImageFromFile("/home/callum/go/src/github.com/cmwaters/rook/game/assets/farm.png", ebiten.FilterDefault)
 	if err != nil {
@@ -34,4 +33,3 @@ func init() {
 	rookSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = rookSprite.Fill(redColor)
 }
-

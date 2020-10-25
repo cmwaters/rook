@@ -8,7 +8,7 @@ import (
 // server parsing user actions into rest txs and queries to update
 // state accordingly
 type NetworkGameEngine struct {
-	endpoint string
+	endpoint      string
 	playerAddress string
 }
 

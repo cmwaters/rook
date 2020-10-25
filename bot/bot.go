@@ -5,17 +5,8 @@ import (
 )
 
 type Bot interface {
-	Init(InitRequest)
-	Update(UpdateRequest) UpdateResponse
-}
-
-type InitRequest struct {
-	Config  types.GameConfig
-	Faction types.Faction
-}
-
-type UpdateRequest struct {
-	UpdatedTiles map[uint32]types.Tile
+	Init(types.GameConfig)
+	Update(types.PartialState) UpdateResponse
 }
 
 type UpdateResponse struct {

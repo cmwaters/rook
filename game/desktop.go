@@ -25,7 +25,7 @@ func NewRookDesktop() *RookDesktop {
 	config := types.DefaultGameConfig()
 	config.AddSeed(rand.Int63()) // this will just be used from local games
 	r := &RookDesktop{
-		ScreenWidth: 640,
+		ScreenWidth:  640,
 		ScreenHeight: 480,
 		views: map[string]View{
 			gameView: NewLocalGameView(config, 3),

@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	"github.com/hajimehoshi/ebiten"
 	g "github.com/cmwaters/rook/game"
+	"github.com/hajimehoshi/ebiten"
 )
 
 func main() {
@@ -16,4 +16,3 @@ func main() {
 		log.Fatal(err)
 	}
 }
-
