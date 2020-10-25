@@ -44,14 +44,18 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 		b.Init(*l.state.Config)
 	}
 	// start the main game loop
+	fmt.Println("Starting engine loop")
 	ticker := time.NewTicker(l.tickSpeed * time.Second)
 	for range ticker.C {
+		fmt.Println("tick")
 		// first update the state based on all the received messages in that step
 		victor := l.processMessages()
 		if victor != nil { //termination condition
 			// we have a victor. Close the channel and end the game
 			fmt.Printf("%s has won", victor.Moniker)
 			close(state)
+			ticker.Stop()
+			return
 		}
 		// display state changes to all bots and add responses to the queue
 		for idx, b := range l.bots {
@@ -69,6 +73,7 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 			Step:      l.step,
 		}
 		// lastly update the step
+
 		l.step++
 	}
 }
