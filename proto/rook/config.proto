@@ -42,5 +42,6 @@ message SettlementCostsConfig {
 message InitializationConfig {
   uint32 teams = 1;
   ResourceSet resources = 2; 
+  uint32 population = 3;
 }
 

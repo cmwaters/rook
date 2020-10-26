@@ -27,7 +27,7 @@ func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
 	for i := 0; i < bots+1; i++ {
 		state.Factions[i] = types.NewFaction("player"+strconv.Itoa(i), *config.Initial)
 	}
-	types.PopulateFactions(&state.Map, state.Factions, state.Config.Map)
+	state.PopulateFactions()
 
 	return &LocalGameEngine{
 		tickSpeed:  3, // every 3 seconds

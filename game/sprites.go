@@ -43,7 +43,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	farmSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "assets/farm.png"), ebiten.FilterDefault)
+	farmSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/farm.png"), ebiten.FilterDefault)
 	if err != nil {
 		panic(err)
 	}

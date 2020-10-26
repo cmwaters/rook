@@ -13,6 +13,7 @@ func DefaultInitializationConfig() *InitializationConfig {
 	return &InitializationConfig{
 		Teams:     0, // free for all
 		Resources: &ResourceSet{Wood: 5, Food: 5, Stone: 5},
+		Population: 1,
 	}
 }
 

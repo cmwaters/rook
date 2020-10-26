@@ -1,12 +1,43 @@
 package types
 
+import (
+	"math/rand"
+)
+
 func GenerateMap(config *MapConfig) [][]Tile {
 	// TODO: actually create a map
 	return NewEmptyBoard(config)
 }
 
-func PopulateFactions(gameMap *[][]Tile, factions []*Faction, config *MapConfig) {
-	// TODO: populate an existing map with the capital cities of each faction
+type tileInfo struct {
+	Tile *Tile
+	X, Y uint32
+}
+
+// PopulateFactions takes a map and adds the initial capital city somewhere randomly in the map
+func (g *GameState) PopulateFactions() {
+	randGen := rand.New(rand.NewSource(g.Config.Map.Seed))
+	// make a list of all the possible places
+	var possibleTiles []tileInfo
+	for x, column := range g.Map {
+		for y, tile := range column {
+			if tile.Landscape == Landscape_PLAINS {
+				possibleTiles = append(possibleTiles, tileInfo{Tile: &tile, X: uint32(x), Y: uint32(y)})
+			}
+		}
+	}
+	// by allocation each faction a portion of possible tiles that their capital will
+	// reside we eliminate the possibility of collision. 
+	// NOTE: This could be improved as capitals could technically start right next to one another
+	allocation := len(possibleTiles)/len(g.Factions)
+	for x, faction := range g.Factions {
+		chosenTile := possibleTiles[x * allocation + randGen.Intn(allocation)]
+		chosenTile.Tile.Faction = faction
+		chosenTile.Tile.Population = g.Config.Initial.Population
+		index := (chosenTile.Y * g.Config.Map.Width) + chosenTile.X
+		faction.Settlements[index] = Settlement_CAPITAL
+		faction.Population[index] = g.Config.Initial.Population
+	}
 }
 
 // GetVisibleTilesFromMap loops through the position of all population and returns the visible tiles

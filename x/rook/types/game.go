@@ -31,7 +31,7 @@ func NewGameState(players []*sdk.AccAddress, config *GameConfig) *GameState {
 
 	// add capitals of each faction to the map. Note that we pass
 	// a reference to the map so this function can change it directly
-	PopulateFactions(&game.Map, game.Factions, game.Config.Map)
+	game.PopulateFactions()
 
 	return game
 }

@@ -63,15 +63,6 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 			// TODO: write number over the top
 		}
 	}
-	for x := 0; x < int(g.config.Map.Width); x++ {
-		for y := 0; y < int(g.config.Map.Height); y++ {
-			posX := tileMargin + (x * (tileWidth + tileMargin))
-			posY := tileMargin + (y * (tileHeight + tileMargin))
-			g.op.GeoM.Reset()
-			g.op.GeoM.Translate(float64(posX), float64(posY))
-			_ = g.mapImage.DrawImage(plainsSprite, g.op)
-		}
-	}
 	_ = screen.DrawImage(g.mapImage, g.camera.Update())
 }
 
@@ -105,10 +96,15 @@ func (g *GameView) refreshTileSprites(knownTilesNum int) {
 				if g.board[x][y].Settlement != types.Settlement_NONE {
 					g.sprites[index].sprite = SpriteFromSettlement(g.board[x][y].Settlement)
 					g.sprites[index].color = FactionToColorSprite(g.board[x][y].Faction)
-					// TODO: also need to add the population
+					g.sprites[index].population = g.board[x][y].Population
 				} else {
 					g.sprites[index].sprite = SpriteFromLandscape(g.board[x][y].Landscape)
-					g.sprites[index].color = greySprite
+					if g.board[x][y].Population != 0 {
+						g.sprites[index].color = FactionToColorSprite(g.board[x][y].Faction)
+						g.sprites[index].population = g.board[x][y].Population
+					} else {
+						g.sprites[index].color = greySprite
+					}
 				}
 			}
 		}
