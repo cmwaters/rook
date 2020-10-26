@@ -1,13 +1,5 @@
 package types
 
-const (
-	townPopulationRate       = 1
-	cityPopulationRate       = 2
-	lumbermillProductionRate = 1
-	quarryProductionRate     = 1
-	farmProductionRate       = 1
-)
-
 func NewFaction(name string, config InitializationConfig) *Faction {
 	return &Faction{
 		Moniker:     name,
@@ -23,22 +15,22 @@ func (f *Faction) Reap(config *ProductionRatesConfig) {
 		switch settlement {
 		case Settlement_TOWN:
 			if populace, ok := f.Population[position]; ok {
-				f.Population[position] = populace + townPopulationRate
+				f.Population[position] = populace + config.Town
 			} else {
-				f.Population[position] = townPopulationRate
+				f.Population[position] = config.Town
 			}
 		case Settlement_CITY, Settlement_CAPITAL:
 			if populace, ok := f.Population[position]; ok {
-				f.Population[position] = populace + cityPopulationRate
+				f.Population[position] = populace + config.City
 			} else {
-				f.Population[position] = cityPopulationRate
+				f.Population[position] = config.City
 			}
 		case Settlement_LUMBERMILL:
-			f.Resources.Wood += lumbermillProductionRate
+			f.Resources.Wood += config.Lumbermill
 		case Settlement_QUARRY:
-			f.Resources.Stone += quarryProductionRate
+			f.Resources.Stone += config.Quarry
 		case Settlement_FARM:
-			f.Resources.Food += farmProductionRate
+			f.Resources.Food += config.Farm
 		default: // Rooks for example don't produce anything
 			continue
 		}

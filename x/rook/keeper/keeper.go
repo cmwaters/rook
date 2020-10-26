@@ -79,8 +79,23 @@ func (k *Keeper) CheckPendingGames() {
 }
 
 func (k Keeper) UpdateGames() {
-	for _, game := range k.games {
-		game.UpdateResources()
+	var finishedPlayers []string
+	var finishedGames []string
+	for gameId, game := range k.games {
+		if game.Victor() != nil { // in the future we can look at how we display the winner
+			finishedGames = append(finishedGames, gameId)
+			for player := range game.Players {
+				finishedPlayers = append(finishedPlayers, player)
+			}
+		} else {
+			game.UpdateResources()
+		}
+	}
+	for _, game := range finishedGames {
+		delete(k.games, game)
+	}
+	for _, players := range finishedPlayers {
+		delete(k.players, players)
 	}
 }
 

@@ -68,10 +68,11 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 
 func (g *GameView) ApplyStateTransitions(c chan *types.PartialState) {
 	for stateUpdate := range c {
-		fmt.Printf("update state to %d", stateUpdate.Step)
+		fmt.Printf("update state to %d\n", stateUpdate.Step)
 		// update map first
 		for posIdx, tile := range stateUpdate.Map {
 			x, y := IndexToCoordinate(posIdx, g.config.Map.Width)
+			fmt.Printf("%v at x: %d and y: %d\n", tile, x, y)
 			g.board[x][y] = *tile
 		} 
 		// update resources
