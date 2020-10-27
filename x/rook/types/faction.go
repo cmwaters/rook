@@ -58,7 +58,7 @@ func ConstructionResources(config *SettlementCostsConfig, settlement Settlement)
 	case Settlement_ROOK:
 		return config.Rook
 	default:
-		return &ResourceSet{0,0,0}
+		return &ResourceSet{0, 0, 0}
 	}
 }
 

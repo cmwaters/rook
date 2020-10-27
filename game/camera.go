@@ -12,10 +12,11 @@ type Camera struct {
 	posX, posY, targetX, targetY float64
 	pGain                        float64
 	speed                        float64
+	width, height                float64
 }
 
-func NewCamera(x, y, gain, speed float64) *Camera {
-	return &Camera{x, y, x, y, gain, speed}
+func NewCamera(x, y, gain, speed, width, height float64) *Camera {
+	return &Camera{x, y, x, y, gain, speed, width, height}
 }
 
 func (c *Camera) ParseMovementKeys() {
@@ -51,7 +52,8 @@ func (c *Camera) ParseMovementKeys() {
 }
 
 func (c *Camera) MoveTo(x, y int) {
-
+	c.targetX = c.posX - float64(x) + (c.width-float64(tileWidth))/2
+	c.targetY = c.posY - float64(y) + (c.height-float64(tileHeight))/2
 }
 
 func (c *Camera) Update() *ebiten.DrawImageOptions {

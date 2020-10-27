@@ -27,6 +27,7 @@ var (
 )
 
 var (
+	colorSprites []*ebiten.Image
 	// colors for each faction
 	redSprite,
 	lightRedSprite,
@@ -36,14 +37,16 @@ var (
 	lightGreySprite *ebiten.Image
 )
 
-var colorSprites = []*ebiten.Image{redSprite, blueSprite}
-
 func init() {
 	pwd, err := os.Getwd()
 	if err != nil {
 		panic(err)
 	}
-	farmSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/farm.png"), ebiten.FilterDefault)
+	farmSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/Farm-01.png"), ebiten.FilterDefault)
+	if err != nil {
+		panic(err)
+	}
+	capitalSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/Capital-01.png"), ebiten.FilterDefault)
 	if err != nil {
 		panic(err)
 	}
@@ -55,6 +58,16 @@ func init() {
 	_ = redSprite.Fill(redColor)
 	lightRedSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = lightRedSprite.Fill(lightRedColor)
+	blueSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = blueSprite.Fill(blueColor)
+	lightBlueSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightBlueSprite.Fill(lightBlueColor)
+	greySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = greySprite.Fill(greyColor)
+	lightGreySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightGreySprite.Fill(lightGreyColor)
+	// add all the colors to an array
+	colorSprites = []*ebiten.Image{redSprite, blueSprite}
 }
 
 func SpriteFromLandscape(l types.Landscape) *ebiten.Image {
@@ -94,9 +107,38 @@ func SpriteFromSettlement(s types.Settlement) *ebiten.Image {
 }
 
 func FactionToColorSprite(f *types.Faction) *ebiten.Image {
-	number, err := strconv.Atoi(f.Moniker[len(f.Moniker) - 1:])
-	if err != nil {
-		panic(fmt.Errorf("converting faction moniker: %s to number: %w", f.Moniker, err))
+	if f == nil {
+		return greySprite
 	}
-	return colorSprites[number % len(colorSprites)]
+	number, err := strconv.Atoi(f.Moniker[len(f.Moniker)-1:])
+	if err != nil {
+		panic(fmt.Sprintf("converting faction moniker: %s to number: %s", f.Moniker, err))
+	}
+	return colorSprites[number%len(colorSprites)]
+}
+
+func toActivatedColor(color *ebiten.Image) *ebiten.Image {
+	switch color {
+	case redSprite:
+		return lightRedSprite
+	case blueSprite:
+		return lightRedSprite
+	case greySprite:
+		return lightGreySprite
+	default:
+		panic(fmt.Sprintf("%v is not a recognized color image in rook", color))
+	}
+}
+
+func toDeactivatedColor(color *ebiten.Image) *ebiten.Image {
+	switch color {
+	case lightRedSprite:
+		return redSprite
+	case lightBlueSprite:
+		return blueSprite
+	case lightGreySprite:
+		return greySprite
+	default:
+		panic(fmt.Sprintf("%v is not a recognized color image in rook", color))
+	}
 }

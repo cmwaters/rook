@@ -9,8 +9,10 @@ import (
 )
 
 const (
-	menuView = "menu"
-	gameView = "game"
+	menuView            = "menu"
+	gameView            = "game"
+	defaultScreenWidth  = 640
+	defaultScreenHeight = 480
 )
 
 // RookDesktop implements ebiten.Game interface.
@@ -25,8 +27,8 @@ func NewRookDesktop() *RookDesktop {
 	config := types.DefaultGameConfig()
 	config.AddSeed(rand.Int63()) // this will just be used from local games
 	r := &RookDesktop{
-		ScreenWidth:  640,
-		ScreenHeight: 480,
+		ScreenWidth:  defaultScreenWidth,
+		ScreenHeight: defaultScreenHeight,
 		views: map[string]View{
 			gameView: NewLocalGameView(config, 3),
 		},
@@ -61,6 +63,10 @@ func (r *RookDesktop) Draw(screen *ebiten.Image) {
 // If you don't have to adjust the screen size with the outside size, just return a fixed size.
 func (r *RookDesktop) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	r.ScreenWidth, r.ScreenHeight = outsideWidth, outsideHeight
+	if game, ok := r.current.(*GameView); ok {
+		game.camera.width = float64(outsideWidth)
+		game.camera.height = float64(outsideHeight)
+	}
 	return r.ScreenWidth, r.ScreenHeight
 }
 

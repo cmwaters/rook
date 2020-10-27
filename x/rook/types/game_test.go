@@ -7,7 +7,6 @@ import (
 	// "github.com/stretchr/testify/mock"
 	// "github.com/stretchr/testify/require"
 	tmrand "github.com/tendermint/tendermint/libs/rand"
-	
 )
 
 func TestNewGameState(t *testing.T) {
@@ -33,7 +32,7 @@ func TestNewGameState(t *testing.T) {
 	for _, faction := range game.Factions {
 		if assert.EqualValues(t, 1, len(faction.Settlements)) {
 			for pos, settlement := range faction.Settlements {
-				x, y := pos % width, pos / width
+				x, y := pos%width, pos/width
 				assert.EqualValues(t, game.Map[x][y].Settlement, settlement)
 			}
 		}

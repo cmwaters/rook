@@ -50,8 +50,11 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 	}
 	// start the main game loop
 	fmt.Println("Starting engine loop")
+	state <- l.sendVisibleStates()
 	ticker := time.NewTicker(l.tickSpeed * time.Second)
 	for range ticker.C {
+		// update the step
+		l.step++
 		fmt.Println("tick")
 		// first update the state based on all the received messages in that step
 		victor := l.processMessages()
@@ -62,25 +65,8 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 			ticker.Stop()
 			return
 		}
-		// display state changes to all bots and add responses to the queue
-		for idx, b := range l.bots {
-			tiles := types.GetVisibleTilesFromMap(l.state.Map, *l.state.Factions[idx], l.state.Config.Map)
-			resp := b.Update(types.PartialState{Map: tiles, Resources: l.state.Factions[idx].Resources, Step: l.step})
-			l.buildQueue[idx] = resp.Builds
-			l.moveQueue[idx] = resp.Moves
-		}
-		// get the visible area for the player and send it through the state channel
-		// TODO: in the future we could look at just sending the delta than the entire visible map
-		playerTiles := types.GetVisibleTilesFromMap(l.state.Map, *l.state.Factions[len(l.bots)], l.state.Config.Map)
-		fmt.Printf("Player can see %d tiles\n", len(playerTiles))
-		state <- &types.PartialState{
-			Map:       playerTiles,
-			Resources: l.state.Factions[len(l.bots)].Resources,
-			Step:      l.step,
-		}
-		// lastly update the step
+		state <- l.sendVisibleStates()
 
-		l.step++
 	}
 }
 
@@ -113,6 +99,25 @@ func (l *LocalGameEngine) processMessages() *types.Faction {
 		l.moveQueue[idx] = []*types.MsgMove{}
 	}
 	return l.state.Victor()
+}
+
+func (l *LocalGameEngine) sendVisibleStates() *types.PartialState {
+	// display state changes to all bots and add responses to the queue
+	for idx, b := range l.bots {
+		tiles := types.GetVisibleTilesFromMap(l.state.Map, *l.state.Factions[idx], l.state.Config.Map)
+		resp := b.Update(types.PartialState{Map: tiles, Resources: l.state.Factions[idx].Resources, Step: l.step})
+		l.buildQueue[idx] = resp.Builds
+		l.moveQueue[idx] = resp.Moves
+	}
+	// get the visible area for the player and send it through the state channel
+	// TODO: in the future we could look at just sending the delta than the entire visible map
+	playerTiles := types.GetVisibleTilesFromMap(l.state.Map, *l.state.Factions[len(l.bots)], l.state.Config.Map)
+	fmt.Printf("Player can see %d tiles\n", len(playerTiles))
+	return &types.PartialState{
+		Map:       playerTiles,
+		Resources: l.state.Factions[len(l.bots)].Resources,
+		Step:      l.step,
+	}
 }
 
 func InitializeBots(count int) []bot.Bot {

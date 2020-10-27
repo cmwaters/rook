@@ -11,8 +11,8 @@ func DefaultGameConfig() *GameConfig {
 
 func DefaultInitializationConfig() *InitializationConfig {
 	return &InitializationConfig{
-		Teams:     0, // free for all
-		Resources: &ResourceSet{Wood: 5, Food: 5, Stone: 5},
+		Teams:      0, // free for all
+		Resources:  &ResourceSet{Wood: 5, Food: 5, Stone: 5},
 		Population: 1,
 	}
 }
@@ -58,13 +58,13 @@ func (c GameConfig) WithoutSeed() GameConfig {
 	return GameConfig{
 		Initial: c.Initial,
 		Map: &MapConfig{
-			Width: c.Map.Width,
-			Height: c.Map.Height,
-			LineOfSight: c.Map.LineOfSight,
+			Width:           c.Map.Width,
+			Height:          c.Map.Height,
+			LineOfSight:     c.Map.LineOfSight,
 			RookLineOfSight: c.Map.RookLineOfSight,
-			Seed: 0,
+			Seed:            0,
 		},
 		Construction: c.Construction,
-		Production: c.Production,
+		Production:   c.Production,
 	}
 }

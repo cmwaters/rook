@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"math/rand"
 )
 
@@ -35,18 +34,18 @@ func (g *GameState) PopulateFactions() {
 		}
 	}
 	// by allocation each faction a portion of possible tiles that their capital will
-	// reside we eliminate the possibility of collision. 
+	// reside we eliminate the possibility of collision.
 	// NOTE: This could be improved as capitals could technically start right next to one another
-	allocation := len(possibleTiles)/len(g.Factions)
+	allocation := len(possibleTiles) / len(g.Factions)
 	for x, faction := range g.Factions {
-		chosenTile := possibleTiles[x * allocation + randGen.Intn(allocation)]
+		chosenTile := possibleTiles[x*allocation+randGen.Intn(allocation)]
 		g.Map[chosenTile.X][chosenTile.Y].Settlement = Settlement_CAPITAL
 		g.Map[chosenTile.X][chosenTile.Y].Faction = faction
 		g.Map[chosenTile.X][chosenTile.Y].Population = g.Config.Initial.Population
 		index := (chosenTile.Y * g.Config.Map.Width) + chosenTile.X
 		faction.Settlements[index] = Settlement_CAPITAL
 		faction.Population[index] = g.Config.Initial.Population
-		if (g.Map[chosenTile.X][chosenTile.Y].Settlement != Settlement_CAPITAL) {
+		if g.Map[chosenTile.X][chosenTile.Y].Settlement != Settlement_CAPITAL {
 			panic("hello")
 		}
 	}
@@ -62,12 +61,10 @@ func GetVisibleTilesFromMap(gameMap [][]Tile, faction Faction, config *MapConfig
 		for y := 0; y < len(gameMap[x]); y++ {
 			// fmt.Println(gameMap[x][y].Faction)
 			if gameMap[x][y].Faction != nil && gameMap[x][y].Faction.Moniker == faction.Moniker {
-				fmt.Printf("High jack\n")
 				positions = append(positions, Position{X: uint32(x), Y: uint32(y)})
 			}
 		}
 	}
-	fmt.Printf("We have %d position\n", positions)
 	visibleTiles := make(map[uint32]*Tile)
 	for _, pos := range positions {
 		lineOfSight := config.LineOfSight
@@ -79,7 +76,7 @@ func GetVisibleTilesFromMap(gameMap [][]Tile, faction Faction, config *MapConfig
 			visibleTiles[index] = tile
 		}
 	}
-  return visibleTiles
+	return visibleTiles
 }
 
 func getNeighborTiles(gameMap [][]Tile, pos Position, size int) map[uint32]*Tile {
@@ -94,7 +91,7 @@ func getNeighborTiles(gameMap [][]Tile, pos Position, size int) map[uint32]*Tile
 			if x < 0 || y < 0 || x >= width || y >= height {
 				continue
 			}
-			tiles[uint32((y * width) + x)] = &gameMap[x][y]
+			tiles[uint32((y*width)+x)] = &gameMap[x][y]
 		}
 	}
 	return tiles
