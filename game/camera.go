@@ -51,9 +51,13 @@ func (c *Camera) ParseMovementKeys() {
 	c.targetY += diffY
 }
 
+// moves the camera to an absolute point in the map. Used
+// for centering on tiles
 func (c *Camera) MoveTo(x, y int) {
-	c.targetX = c.posX - float64(x) + (c.width-float64(tileWidth))/2
-	c.targetY = c.posY - float64(y) + (c.height-float64(tileHeight))/2
+	// the second part of the assignment center the square in
+	// the middle of the screen as opposed to the top left
+	c.targetX = -float64(x) + (c.width - float64(tileWidth))/2
+	c.targetY = -float64(y) + (c.height - float64(tileHeight))/2
 }
 
 func (c *Camera) Update() *ebiten.DrawImageOptions {

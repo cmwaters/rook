@@ -12,29 +12,32 @@ import (
 )
 
 var (
-	//landscapes and settlements
+	// settlements
+	settlementSprites map[types.Settlement]*ebiten.Image
 	capitalSprite,
 	citySprite,
 	farmSprite,
-	forestSprite,
-	lakeSprite,
 	lumbermillSprite,
-	mountainsSprite,
-	plainsSprite,
 	quarrySprite,
 	rookSprite,
 	townSprite *ebiten.Image
-)
+	
+	//landscapes
+	landSprites map[types.Landscape]*ebiten.Image
+	forestSprite,
+	lakeSprite,
+	mountainsSprite,
+	plainsSprite *ebiten.Image
 
-var (
-	colorSprites []*ebiten.Image
-	// colors for each faction
+	// faction colours
+	colorSprites map[string]*ebiten.Image
 	redSprite,
 	lightRedSprite,
 	blueSprite,
 	lightBlueSprite,
 	greySprite,
 	lightGreySprite *ebiten.Image
+	colors = []string{"red", "blue"}
 )
 
 func init() {
@@ -52,7 +55,6 @@ func init() {
 	}
 
 	plainsSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
-	_ = plainsSprite.Fill(greyColor)
 
 	redSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = redSprite.Fill(redColor)
@@ -67,7 +69,29 @@ func init() {
 	lightGreySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = lightGreySprite.Fill(lightGreyColor)
 	// add all the colors to an array
-	colorSprites = []*ebiten.Image{redSprite, blueSprite}
+	colorSprites = map[string]*ebiten.Image{
+		"red": redSprite, 
+		"blue": blueSprite,
+		"grey": greySprite,
+	}
+	
+	landSprites = map[types.Landscape]*ebiten.Image{
+		types.Landscape_FOREST: forestSprite,
+		types.Landscape_LAKE: lakeSprite,
+		types.Landscape_MOUNTAINS: mountainsSprite,
+		types.Landscape_PLAINS: plainsSprite,
+	}
+	
+	settlementSprites = map[types.Settlement]*ebiten.Image{
+	types.Settlement_CAPITAL: capitalSprite,
+	types.Settlement_CITY: citySprite,
+	types.Settlement_FARM: farmSprite,
+	types.Settlement_LUMBERMILL: lumbermillSprite,
+	types.Settlement_QUARRY: quarrySprite,
+	types.Settlement_ROOK: rookSprite,
+	types.Settlement_TOWN: townSprite,
+	}
+	
 }
 
 func SpriteFromLandscape(l types.Landscape) *ebiten.Image {
@@ -106,15 +130,15 @@ func SpriteFromSettlement(s types.Settlement) *ebiten.Image {
 	}
 }
 
-func FactionToColorSprite(f *types.Faction) *ebiten.Image {
+func FactionToColorSprite(f *types.Faction) string {
 	if f == nil {
-		return greySprite
+		return "grey"
 	}
 	number, err := strconv.Atoi(f.Moniker[len(f.Moniker)-1:])
 	if err != nil {
 		panic(fmt.Sprintf("converting faction moniker: %s to number: %s", f.Moniker, err))
 	}
-	return colorSprites[number%len(colorSprites)]
+	return colors[number%len(colors)]
 }
 
 func toActivatedColor(color *ebiten.Image) *ebiten.Image {
@@ -122,7 +146,7 @@ func toActivatedColor(color *ebiten.Image) *ebiten.Image {
 	case redSprite:
 		return lightRedSprite
 	case blueSprite:
-		return lightRedSprite
+		return lightBlueSprite
 	case greySprite:
 		return lightGreySprite
 	default:

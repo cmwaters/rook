@@ -65,6 +65,7 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 			ticker.Stop()
 			return
 		}
+		l.state.UpdateResources()
 		state <- l.sendVisibleStates()
 
 	}
