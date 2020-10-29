@@ -20,6 +20,6 @@ func (l *NetworkGameEngine) Build(settlement types.Settlement, x, y int) error {
 	return nil
 }
 
-func (l *NetworkGameEngine) Move(quantity, x, y int, direction types.Direction) error {
+func (l *NetworkGameEngine) Move(quantity uint32, x, y int, direction types.Direction) error {
 	return nil
 }

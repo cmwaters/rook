@@ -49,7 +49,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	capitalSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/Capital-01.png"), ebiten.FilterDefault)
+	capitalSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/capital.png"), ebiten.FilterDefault)
 	if err != nil {
 		panic(err)
 	}
@@ -154,6 +154,7 @@ func toActivatedColor(color *ebiten.Image) *ebiten.Image {
 	}
 }
 
+// TODO: deprecate
 func toDeactivatedColor(color *ebiten.Image) *ebiten.Image {
 	switch color {
 	case lightRedSprite:

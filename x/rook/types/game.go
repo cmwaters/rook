@@ -36,6 +36,7 @@ func NewGameState(players []*sdk.AccAddress, config *GameConfig) *GameState {
 	return game
 }
 
+// Build validates a build msg from a faction and applies it to the current state
 func (g *GameState) Build(faction *Faction, settlement Settlement, position *Position) error {
 	// validate position
 	if position.X >= g.Config.Map.Width {
@@ -85,6 +86,7 @@ func (g *GameState) Build(faction *Faction, settlement Settlement, position *Pos
 	return nil
 }
 
+// Move validates a move msg and applies it to the current state
 func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, direction Direction) error {
 	// validate position
 	if origin.X >= g.Config.Map.Width {

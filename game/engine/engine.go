@@ -9,7 +9,7 @@ import (
 type GameEngine interface {
 	Init(chan *types.PartialState)
 	Build(settlement types.Settlement, x, y int) error
-	Move(quantity, x, y int, direction types.Direction) error
+	Move(quantity uint32, x, y int, direction types.Direction) error
 }
 
 var _ GameEngine = &LocalGameEngine{}

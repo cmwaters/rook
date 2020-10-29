@@ -54,7 +54,7 @@ func NewLocalGameView(config *types.GameConfig, bots int) *GameView {
 
 func (g *GameView) Update(views map[string]View) (View, error) {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
-		g.activateTileAt(ebiten.CursorPosition())
+		g.handleClick(ebiten.CursorPosition())
 	}
 	g.camera.ParseMovementKeys()
 	return views[gameView], nil
@@ -119,56 +119,7 @@ func (g *GameView) ApplyStateTransitions(c chan *types.PartialState) {
 	}
 }
 
-// DEPRECATE
-// func (g *GameView) refreshTileSprites(knownTilesNum int) {
-// 	g.sprites = make([]TileSprite, knownTilesNum)
-// 	index := 0
-// 	for x := 0; x < int(g.config.Map.Width); x++ {
-// 		for y := 0; y < int(g.config.Map.Height); y++ {
-// 			if g.board[x][y].Landscape != types.Landscape_UNKNOWN {
-// 				posX := tileMargin + (x * (tileWidth + tileMargin))
-// 				posY := tileMargin + (y * (tileHeight + tileMargin))
-// 				g.sprites[index] = TileSprite{
-// 					x:    x,
-// 					y:    y,
-// 					posX: float64(posX),
-// 					posY: float64(posY),
-// 				}
-// 				if g.board[x][y].Settlement != types.Settlement_NONE {
-// 					// if this is the start of the game we should move the camera
-// 					// to the players capital
-// 					if g.board[x][y].Settlement == types.Settlement_CAPITAL && g.step == 0 {
-// 						fmt.Printf("\nTILE POS, X: %d, Y: %d", posX, posY)
-// 						g.camera.MoveTo(posX, posY)
-// 						g.active = position{x: x, y: y, index: index}
-// 					}
-
-// 					g.sprites[index].sprite = SpriteFromSettlement(g.board[x][y].Settlement)
-// 					g.sprites[index].color = FactionToColorSprite(g.board[x][y].Faction)
-// 					g.sprites[index].population = g.board[x][y].Population
-// 				} else {
-// 					g.sprites[index].sprite = SpriteFromLandscape(g.board[x][y].Landscape)
-// 					if g.board[x][y].Population != 0 {
-// 						g.sprites[index].color = FactionToColorSprite(g.board[x][y].Faction)
-// 						g.sprites[index].population = g.board[x][y].Population
-// 					} else {
-// 						g.sprites[index].color = greySprite
-// 					}
-// 				}
-// 				if g.active.x == x && g.active.y == y {
-// 					g.sprites[index].color = toActivatedColor(FactionToColorSprite(g.board[x][y].Faction))
-// 				}
-// 				if g.sprites[index].population != 0 {
-// 					text.Draw(g.sprites[index].color, strconv.Itoa(int(g.board[x][y].Population)), mFont, (tileWidth/2 - 6), (tileHeight/2 + 6), greyColor)
-// 				}
-// 				index++
-// 			}
-// 		}
-// 	}
-// 	g.refresh = true
-// }
-
-func (g *GameView) activateTileAt(clickX, clickY int) {
+func (g *GameView) handleClick(clickX, clickY int) {
 	clickX, clickY = clickX-int(g.camera.posX), clickY-int(g.camera.posY)
 	fmt.Printf("\nadjusted click at x: %d, y: %d", clickX, clickY)
 	for x := 0; x < int(g.config.Map.Width); x++ {
@@ -177,83 +128,87 @@ func (g *GameView) activateTileAt(clickX, clickY int) {
 				posX := tileMargin + (x * (tileWidth + tileMargin))
 				posY := tileMargin + (y * (tileHeight + tileMargin))
 				if clickX > posX && clickX < posX+tileWidth && clickY > posY && clickY < posY+tileHeight {
-					fmt.Printf("\ndeactivating sprite at x %d y %d", g.active.x, g.active.y)
-					prior := g.board[g.active.x][g.active.y]
-					priorPosX := tileMargin + (g.active.x * (tileWidth + tileMargin))
-					priorPosY := tileMargin + (g.active.y * (tileHeight + tileMargin))
-					g.op.GeoM.Reset()
-					g.op.GeoM.Translate(float64(priorPosX), float64(priorPosY))
-					_ = g.mapImage.DrawImage(colorSprites[FactionToColorSprite(prior.Faction)], g.op)
-					if prior.Settlement != types.Settlement_NONE {
-						_ = g.mapImage.DrawImage(settlementSprites[prior.Settlement], g.op)
-					} else {
-						_ = g.mapImage.DrawImage(landSprites[prior.Landscape], g.op)
-					}
-					if prior.Population != 0 {
-						text.Draw(g.mapImage, strconv.Itoa(int(prior.Population)), mFont, priorPosX + (tileWidth/2 - 6), priorPosY + (tileHeight/2 + 6), whiteColor)
-					}
 					
-					// t := &g.board[g.active.x][g.active.y]
-					g.active = position{x: x, y: y}
-					g.op.GeoM.Reset()
-					g.op.GeoM.Translate(float64(posX), float64(posY))
-					// if toActivatedColor(colorSprites[FactionToColorSprite(g.board[x][y].Faction)]) == lightGreySprite {
-					// 	panic("Hello")
-					// }
-					// _ = g.mapImage.DrawImage(lightGreySprite, g.op)
-					fmt.Printf("\nactivating sprite at x %d y %d", x, y)
-					_ = g.mapImage.DrawImage(toActivatedColor(colorSprites[FactionToColorSprite(g.board[x][y].Faction)]), g.op)
-					if g.board[x][y].Settlement != types.Settlement_NONE {
-						_ = g.mapImage.DrawImage(settlementSprites[g.board[x][y].Settlement], g.op)
-					} else {
-						_ = g.mapImage.DrawImage(landSprites[g.board[x][y].Landscape], g.op)
-					}
-					if g.board[x][y].Population != 0 {
-						text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX + (tileWidth/2 - 6), posY + (tileHeight/2 + 6), whiteColor)
-					}
-					// _ = g.mapImage.DrawImage(lightGreySprite, g.op)
-					// g.sprites[g.active.index] = TileSprite{
-					// 	x: t.x,
-					// 	y: t.y,
-					// 	posX: t.posX,
-					// 	posY: t.posY,
-					// 	color: toDeactivatedColor(t.color),
-					// 	sprite: t.sprite,
-					// 	population: t.population,
-					// }
-					// if t.population != 0 {
-					// 	text.Draw(g.sprites[g.active.index].color, strconv.Itoa(int(t.population)), mFont, (tileWidth/2 - 6), (tileHeight/2 + 6), greyColor)
-					// }
-					// g.op.GeoM.Reset()
-					// g.op.GeoM.Translate(t.posX, t.posY)
-					// _ = g.mapImage.DrawImage(t.color, g.op)
-					// _ = g.mapImage.DrawImage(t.sprite, g.op)
-					// fmt.Printf("\nactivating sprite at x %d y %d", sprite.x, sprite.y)
-					// g.active = position{sprite.x, sprite.y, idx}
-					// if sprite.color != greySprite {
-					// 	panic("why are you not grey")
-					// } 
-					// g.sprites[idx] = TileSprite{
-					// 	x: sprite.x,
-					// 	y: sprite.y,
-					// 	posX: sprite.posX,
-					// 	posY: sprite.posY,
-					// 	color: toActivatedColor(sprite.color),
-					// 	sprite: sprite.sprite,
-					// 	population: sprite.population,
-					// }
-					// if sprite.population != 0 {
-					// 	text.Draw(g.sprites[idx].color, strconv.Itoa(int(sprite.population)), mFont, (tileWidth/2 - 6), (tileHeight/2 + 6), greyColor)
-					// }
-					// g.op.GeoM.Reset()
-					// g.op.GeoM.Translate(sprite.posX, sprite.posY)
-					// _ = g.mapImage.DrawImage(sprite.color, g.op)
-					// _ = g.mapImage.DrawImage(sprite.sprite, g.op)
-					// g.camera.MoveTo(int(sprite.posX), int(sprite.posY))
+					
+					g.deactivateCurrentTile()
+					
+					
+					g.activateTile(x, y, posX, posY)
 				}
 			}
 		}
 	}
+}
+
+func (g *GameView) deactivateCurrentTile() {
+	fmt.Printf("\ndeactivating sprite at x %d y %d", g.active.x, g.active.y)
+	prior := g.board[g.active.x][g.active.y]
+	priorPosX := tileMargin + (g.active.x * (tileWidth + tileMargin))
+	priorPosY := tileMargin + (g.active.y * (tileHeight + tileMargin))
+	g.op.GeoM.Reset()
+	g.op.GeoM.Translate(float64(priorPosX), float64(priorPosY))
+	_ = g.mapImage.DrawImage(colorSprites[FactionToColorSprite(prior.Faction)], g.op)
+	if prior.Settlement != types.Settlement_NONE {
+		_ = g.mapImage.DrawImage(settlementSprites[prior.Settlement], g.op)
+	} else {
+		_ = g.mapImage.DrawImage(landSprites[prior.Landscape], g.op)
+	}
+	if prior.Population != 0 {
+		text.Draw(g.mapImage, strconv.Itoa(int(prior.Population)), mFont, priorPosX + (tileWidth/2 - 6), priorPosY + (tileHeight/2 + 6), whiteColor)
+	}
+}
+
+func (g *GameView) activateTile(x, y, posX, posY int) {
+	g.active = position{x: x, y: y}
+	g.op.GeoM.Reset()
+	g.op.GeoM.Translate(float64(posX), float64(posY))
+	fmt.Printf("\nactivating sprite at x %d y %d", x, y)
+	_ = g.mapImage.DrawImage(toActivatedColor(colorSprites[FactionToColorSprite(g.board[x][y].Faction)]), g.op)
+	if g.board[x][y].Settlement != types.Settlement_NONE {
+		_ = g.mapImage.DrawImage(settlementSprites[g.board[x][y].Settlement], g.op)
+	} else {
+		_ = g.mapImage.DrawImage(landSprites[g.board[x][y].Landscape], g.op)
+	}
+	if g.board[x][y].Population != 0 {
+		text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX + (tileWidth/2 - 6), posY + (tileHeight/2 + 6), whiteColor)
+	}
+}
+
+func (g *GameView) attemptToMovePopulation(targetX, targetY int) (quantity uint32, direction types.Direction) {
+	quantity = g.board[g.active.x][g.active.y].Population
+	if g.board[g.active.x][g.active.y].Settlement != types.Settlement_NONE {
+		// leave one population behind to occupy the settlement
+		quantity--
+	}
+	if quantity == 0 {
+		return 0, types.Direction_NOWHERE // we have no population to move
+	}
+
+	if targetX == g.active.x { // attempt was on the same vertical plane
+		// check if moving up
+		if g.active.y == 0  && targetY == int(g.config.Map.Height) - 1 || targetY == g.active.y - 1 {
+			direction = types.Direction_UP
+		} else if g.active.y == int(g.config.Map.Height) - 1 && targetY == 0 || targetY == g.active.y + 1 {
+			// moving down
+			direction = types.Direction_DOWN
+		} else {
+			return 0, types.Direction_NOWHERE
+		}
+	} else if targetY == g.active.y { // attempt was on the same horizontal plane
+		// check if moving to the right
+		if g.active.x == int(g.config.Map.Width) - 1 && targetX == 0 || targetX == g.active.x + 1 {
+			direction = types.Direction_RIGHT
+		} else if g.active.x == 0 && targetX == int(g.config.Map.Width) - 1 || targetX == g.active.x - 1 {
+			// moving to the left
+			direction = types.Direction_LEFT
+		} else {
+			return 0, types.Direction_NOWHERE
+		}
+	} else { // on neither planes
+		return 0, types.Direction_NOWHERE
+	}
+	
+	return
 }
 
 func NewMapImage(config *types.MapConfig) *ebiten.Image {

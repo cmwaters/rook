@@ -44,6 +44,10 @@ func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
 	}
 }
 
+// Init begins running the engine loop. This consists of updating the step, 
+// checking if a player has won then processing all the build and move messages
+// from the player and each of the bots before updating the resources and sending
+// the visible state to each of the bots and the player.
 func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 	for _, b := range l.bots {
 		b.Init(*l.state.Config)
@@ -71,15 +75,17 @@ func (l *LocalGameEngine) Init(state chan *types.PartialState) {
 	}
 }
 
+// Build parses a build action by the user and appends it to the queue for later processing
 func (l *LocalGameEngine) Build(settlement types.Settlement, x, y int) error {
 	msg := &types.MsgBuild{Settlement: settlement, Position: &types.Position{X: uint32(x), Y: uint32(y)}}
 	l.buildQueue[len(l.bots)] = append(l.buildQueue[len(l.bots)], msg)
 	return nil
 }
 
-func (l *LocalGameEngine) Move(quantity, x, y int, direction types.Direction) error {
+// Move parses a move action by the user and appends it to the queue for later processing
+func (l *LocalGameEngine) Move(quantity uint32, x, y int, direction types.Direction) error {
 	msg := &types.MsgMove{
-		Quantity:  uint32(quantity),
+		Quantity:  quantity,
 		Position:  &types.Position{X: uint32(x), Y: uint32(y)},
 		Direction: direction,
 	}
