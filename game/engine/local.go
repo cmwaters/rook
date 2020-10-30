@@ -22,17 +22,18 @@ type LocalGameEngine struct {
 }
 
 func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
-	state := types.GameState{Config: config, Factions: make([]*types.Faction, bots+1)}
-	state.Map = types.GenerateMap(config.Map)
+	seededConfig := config
+	if config.Map.Seed == 0 {
+		seededConfig.Map.Seed = time.Now().Unix()
+		fmt.Printf("Creating game using seed: %d\n", seededConfig.Map.Seed)
+	}
+	state := types.GameState{Config: seededConfig, Factions: make([]*types.Faction, bots+1)}
+	state.Map = types.GenerateMap(state.Config.Map)
 	for i := 0; i < bots+1; i++ {
 		state.Factions[i] = types.NewFaction("player"+strconv.Itoa(i), *config.Initial)
 	}
 	state.PopulateFactions()
-	for x, column := range state.Map {
-		for y, tile := range column {
-			fmt.Printf("%v at x: %d, y: %d\n", tile.Settlement, x, y)
-		}
-	}
+	
 
 	return &LocalGameEngine{
 		tickSpeed:  3, // every 3 seconds
@@ -95,13 +96,21 @@ func (l *LocalGameEngine) Move(quantity uint32, x, y int, direction types.Direct
 
 // process messages updates state for each message and flushes message queue
 func (l *LocalGameEngine) processMessages() *types.Faction {
+	fmt.Printf("Received %d messages from player", len(l.moveQueue[len(l.bots)]))
 	for idx := 0; idx < len(l.bots)+1; idx++ {
+		
 		for _, buildMessage := range l.buildQueue[idx] {
-			_ = l.state.Build(l.state.Factions[idx], buildMessage.Settlement, buildMessage.Position)
+			err := l.state.Build(l.state.Factions[idx], buildMessage.Settlement, buildMessage.Position)
+			if err != nil {
+				fmt.Printf("Error with message: %w\n", err)
+			}
 		}
 		l.buildQueue[idx] = []*types.MsgBuild{}
 		for _, moveMessage := range l.moveQueue[idx] {
-			_ = l.state.Move(l.state.Factions[idx], moveMessage.Quantity, moveMessage.Position, moveMessage.Direction)
+			err := l.state.Move(l.state.Factions[idx], moveMessage.Quantity, moveMessage.Position, moveMessage.Direction)
+			if err != nil {
+				fmt.Printf("Error with message: %w\n", err)
+			}
 		}
 		l.moveQueue[idx] = []*types.MsgMove{}
 	}

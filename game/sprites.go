@@ -45,30 +45,6 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	
-	// add all the colors to an array
-	colorSprites = map[string]*ebiten.Image{
-		"red": redSprite, 
-		"blue": blueSprite,
-		"grey": greySprite,
-	}
-	
-	landSprites = map[types.Landscape]*ebiten.Image{
-		types.Landscape_FOREST: forestSprite,
-		types.Landscape_LAKE: lakeSprite,
-		types.Landscape_MOUNTAINS: mountainsSprite,
-		types.Landscape_PLAINS: plainsSprite,
-	}
-	
-	settlementSprites = map[types.Settlement]*ebiten.Image{
-		types.Settlement_CAPITAL: capitalSprite,
-		types.Settlement_CITY: citySprite,
-		types.Settlement_FARM: farmSprite,
-		types.Settlement_LUMBERMILL: lumbermillSprite,
-		types.Settlement_QUARRY: quarrySprite,
-		types.Settlement_ROOK: rookSprite,
-		types.Settlement_TOWN: townSprite,
-	}
 		
 	capitalSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/Capital.png"), ebiten.FilterDefault)
 	if err != nil {
@@ -126,6 +102,30 @@ func init() {
 	lightGreySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = lightGreySprite.Fill(lightGreyColor)
 	
+	// add all the colors to an array
+	colorSprites = map[string]*ebiten.Image{
+		"red": redSprite, 
+		"blue": blueSprite,
+		"grey": greySprite,
+	}
+	
+	landSprites = map[types.Landscape]*ebiten.Image{
+		types.Landscape_FOREST: forestSprite,
+		types.Landscape_LAKE: lakeSprite,
+		types.Landscape_MOUNTAINS: mountainsSprite,
+		types.Landscape_PLAINS: plainsSprite,
+	}
+	
+	settlementSprites = map[types.Settlement]*ebiten.Image{
+		types.Settlement_CAPITAL: capitalSprite,
+		types.Settlement_CITY: citySprite,
+		types.Settlement_FARM: farmSprite,
+		types.Settlement_LUMBERMILL: lumbermillSprite,
+		types.Settlement_QUARRY: quarrySprite,
+		types.Settlement_ROOK: rookSprite,
+		types.Settlement_TOWN: townSprite,
+	}
+	
 }
 
 func SpriteFromLandscape(l types.Landscape) *ebiten.Image {
@@ -164,15 +164,15 @@ func SpriteFromSettlement(s types.Settlement) *ebiten.Image {
 	}
 }
 
-func FactionToColorSprite(f *types.Faction) string {
+func FactionToColorSprite(f *types.Faction) *ebiten.Image {
 	if f == nil {
-		return "grey"
+		return colorSprites["grey"]
 	}
 	number, err := strconv.Atoi(f.Moniker[len(f.Moniker)-1:])
 	if err != nil {
 		panic(fmt.Sprintf("converting faction moniker: %s to number: %s", f.Moniker, err))
 	}
-	return colors[number%len(colors)]
+	return colorSprites[colors[number%len(colors)]]
 }
 
 func toActivatedColor(color *ebiten.Image) *ebiten.Image {

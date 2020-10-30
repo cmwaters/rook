@@ -103,8 +103,8 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 			return fmt.Errorf("more populace requested to move than is actually there. Max %d", populace)
 		}
 	} else {
-		return fmt.Errorf("no populace belonging to faction %s at pos x: %d, y: %d", 
-		faction.Moniker, origin.X, origin.Y)
+		return fmt.Errorf("no populace belonging to faction %s at pos x: %d, y: %d, index: %d", 
+		faction.Moniker, origin.X, origin.Y, posIndex)
 	}
 	
 	// ensure that the destination tile can be moved to i.e. not mountains or lake
@@ -115,7 +115,7 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 	if destination.Landscape == Landscape_MOUNTAINS || destination.Landscape == Landscape_LAKE {
 		return fmt.Errorf("cannot move populace to %s", destination.Landscape)
 	}
-	destIndex := (destPos.Y * g.Config.Map.Width) + destPos.Y
+	destIndex := (destPos.Y * g.Config.Map.Width) + destPos.X
 	
 	// check to see if the move is an attack
 	if destination.Faction != nil && destination.Faction != faction {
@@ -220,13 +220,13 @@ func (g *GameState) neighborTile(position *Position, direction Direction) (*Tile
 			return &g.Map[0][position.Y], Position{X: 0, Y: position.Y}
 		}
 		return &g.Map[position.X+1][position.Y], Position{X: position.X+1, Y: position.Y}
-	case Direction_UP:
+	case Direction_DOWN:
 		if position.Y == g.Config.Map.Height-1 {
 			return &g.Map[position.X][0], Position{X: position.X, Y: 0}
 		}
 		return &g.Map[position.X][position.Y+1], Position{X: position.X, Y: position.Y+1}
-	case Direction_DOWN:
-		if position.X == 0 {
+	case Direction_UP:
+		if position.Y == 0 {
 			return &g.Map[position.X][g.Config.Map.Height-1], Position{X: position.X, Y: g.Config.Map.Height-1}
 		}
 		return &g.Map[position.X][position.Y-1], Position{X: position.X, Y: position.Y-1}

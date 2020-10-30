@@ -1,12 +1,14 @@
 package game
 
 import (
-	"math"
+	// "math"
 
 	"github.com/hajimehoshi/ebiten"
 )
 
 const scrollSensitivityFactor = 4
+
+const viewBoundaryMargin = 100
 
 type Camera struct {
 	posX, posY, targetX, targetY float64
@@ -21,23 +23,23 @@ func NewCamera(x, y, gain, speed, width, height float64) *Camera {
 
 func (c *Camera) ParseMovementKeys() {
 	diffX, diffY := 0.0, 0.0
-	if ebiten.IsKeyPressed(ebiten.KeyW) {
-		diffY += c.speed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyA) {
-		diffX += c.speed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyS) {
-		diffY -= c.speed
-	}
-	if ebiten.IsKeyPressed(ebiten.KeyD) {
-		diffX -= c.speed
-	}
-	// adjust if diagonal
-	if diffX != 0 && diffY != 0 {
-		diffX /= math.Sqrt(2)
-		diffY /= math.Sqrt(2)
-	}
+	// if ebiten.IsKeyPressed(ebiten.KeyW) {
+	// 	diffY += c.speed
+	// }
+	// if ebiten.IsKeyPressed(ebiten.KeyA) {
+	// 	diffX += c.speed
+	// }
+	// if ebiten.IsKeyPressed(ebiten.KeyS) {
+	// 	diffY -= c.speed
+	// }
+	// if ebiten.IsKeyPressed(ebiten.KeyD) {
+	// 	diffX -= c.speed
+	// }
+	// // adjust if diagonal
+	// if diffX != 0 && diffY != 0 {
+	// 	diffX /= math.Sqrt(2)
+	// 	diffY /= math.Sqrt(2)
+	// }
 	// check scrolling
 	if diffX == 0 && diffY == 0 {
 		x, y := ebiten.Wheel()
