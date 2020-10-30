@@ -191,8 +191,6 @@ github.com/gogo/gateway v1.1.0/go.mod h1:S7rR8FRQyG3QFESeSv4l2WnsyzlCLG0CzBbUUo/
 github.com/gogo/googleapis v1.1.0/go.mod h1:gf4bu3Q80BeJ6H1S1vYPm8/ELATdvryBaNFGgqEef3s=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0 h1:DACJavvAHhabrF08vX0COfcOBJRhZ8lUbR+ZWIs0Y5g=
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
-github.com/golang/geo v0.0.0-20200730024412-e86565bf3f35 h1:enTowfyfjtomBQhxX9mhUD+0tZhpe4rIzStO4aNlou8=
-github.com/golang/geo v0.0.0-20200730024412-e86565bf3f35/go.mod h1:QZ0nwyI2jOfgRAoBvP+ab5aRr7c9x7lhGEJrKvBwjWI=
 github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b/go.mod h1:SBH7ygxi8pfUlaOkMMuAQtPIUF8ecWP5IEl/CR7VP2Q=
 github.com/golang/groupcache v0.0.0-20160516000752-02826c3e7903/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
 github.com/golang/groupcache v0.0.0-20190129154638-5b532d6fd5ef/go.mod h1:cIg4eruTrX1D+g88fzRXU5OdNfaM+9IcxsU14FzY7Hc=
@@ -273,6 +271,7 @@ github.com/gtank/merlin v0.1.1 h1:eQ90iG7K9pOhtereWsmyRJ6RAwcP4tHTDBHXNg+u5is=
 github.com/gtank/merlin v0.1.1/go.mod h1:T86dnYJhcGOh5BjZFCJWTDeTK7XW8uE+E21Cy/bIQ+s=
 github.com/gtank/ristretto255 v0.1.2 h1:JEqUCPA1NvLq5DwYtuzigd7ss8fwbYay9fi4/5uMzcc=
 github.com/gtank/ristretto255 v0.1.2/go.mod h1:Ph5OpO6c7xKUGROZfWVLiJf9icMDwUeIvY4OmlYW69o=
+github.com/hajimehoshi/bitmapfont v1.3.0 h1:h6+HJQ+2MKT3lEVEArjVC4/h0qcFXlVsMTGuRijEnVA=
 github.com/hajimehoshi/bitmapfont v1.3.0/go.mod h1:/Qb7yVjHYNUV4JdqNkPs6BSZwLjKqkZOMIp6jZD0KgE=
 github.com/hajimehoshi/ebiten v1.12.2 h1:oh+5xyViL0HB+FW/vSCn4QqGlR0hsftGNhxR6qbIxEI=
 github.com/hajimehoshi/ebiten v1.12.2/go.mod h1:9JW9BAz1+swszT0SXR8VUvNvDafs9VspevAcY+KPlV8=
@@ -581,7 +580,6 @@ github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15 h1:hqAk8riJvK4RM
 github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15/go.mod h1:z4YtwM70uOnk8h0pjJYlj3zdYwi9l03By6iAIF5j/Pk=
 github.com/tendermint/go-amino v0.16.0 h1:GyhmgQKvqF82e2oZeuMSp9JTN0N09emoSZlb2lyGa2E=
 github.com/tendermint/go-amino v0.16.0/go.mod h1:TQU0M1i/ImAo+tYpZi73AU3V/dKeCoMC9Sphe2ZwGME=
-github.com/tendermint/tendermint v0.33.8 h1:Xxu4QhpqcomSE0iQDw1MqLgfsa8fqtPtWFJK6zZOVso=
 github.com/tendermint/tendermint v0.34.0-rc3 h1:d7Fsd5rdbxq4GmJ0kRfx7l7LesQM7e70f0ytWLTQ/Go=
 github.com/tendermint/tendermint v0.34.0-rc3/go.mod h1:BoHcEpjfpBHc1Be7RQz3AHaXFNObcDG7SNHCev6Or4g=
 github.com/tendermint/tendermint v0.34.0-rc4.0.20201005135527-d7d0ffea13c6 h1:gqZ0WDpDYgMm/iaiMEXvI1nt/GoWCuwtBomVpUMiAIs=

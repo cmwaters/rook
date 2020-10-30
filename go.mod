@@ -6,7 +6,6 @@ require (
 	github.com/cosmos/cosmos-sdk v0.40.0-rc0
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
-	github.com/golang/geo v0.0.0-20200730024412-e86565bf3f35
 	github.com/google/uuid v1.0.0
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.15.0

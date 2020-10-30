@@ -1,6 +1,8 @@
 package types
 
 import (
+	"fmt"
+	"math/rand"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -39,4 +41,28 @@ func TestNewGameState(t *testing.T) {
 		assert.Equal(t, 9, len(GetVisibleTilesFromMap(game.Map, *faction, game.Config.Map)))
 	}
 
+}
+
+func TestGenerateMap(t *testing.T) {
+	c := DefaultGameConfig()
+	c.Map.Seed = rand.Int63()
+	
+	board := GenerateMap(c.Map)
+	
+	for x := 0; x < int(c.Map.Width); x++ {
+		for y := 0; y < int(c.Map.Height); y++ {
+			switch board[x][y].Landscape {
+			case Landscape_PLAINS:
+				fmt.Print("P  ")
+			case Landscape_MOUNTAINS:
+				fmt.Print("M  ")
+			case Landscape_LAKE:
+				fmt.Print("L  ")
+			case Landscape_FOREST:
+				fmt.Print("F  ")
+			}
+		}
+		fmt.Print("\n\n")
+	}
+	
 }

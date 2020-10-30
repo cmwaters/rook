@@ -110,10 +110,6 @@ func NewAppModule(cdc codec.Marshaler, keeper keeper.Keeper) AppModule {
 	}
 }
 
-// func (am AppModule) NewGame(players []*sdk.AccAddress, config *types.GameConfig) {
-// 	am.keeper.NewGame(players, config)
-// }
-
 // Name returns the capability module's name.
 func (am AppModule) Name() string {
 	return am.AppModuleBasic.Name()
