@@ -59,30 +59,25 @@ func (g *GameState) Build(faction *Faction, settlement Settlement, position *Pos
 	}
 
 	// check all the settlement specific rules
-	// lumbermills must be on a forest
-	if settlement == Settlement_LUMBERMILL && g.Map[position.X][position.Y].Landscape != Landscape_FOREST {
-		return errors.New("building a lumbermill must be over a forest")
+	if settlement != Settlement_LUMBERMILL && g.Map[position.X][position.Y].Landscape == Landscape_FOREST {
+		return fmt.Errorf("building a %v can't be in a forest", settlement)
 	}
-
-	// A quarry must be built adjacent to at least one mountain range
 	isQuarry := func(tile *Tile) bool { return tile.Landscape == Landscape_MOUNTAINS }
 	if settlement == Settlement_QUARRY && len(g.searchAdjacent(position, isQuarry)) == 0 {
 		return errors.New("building a quarry must be adjacent to mountains")
+	} else if settlement == Settlement_LUMBERMILL && g.Map[position.X][position.Y].Landscape != Landscape_FOREST {
+		return errors.New("building a lumbermill must be over a forest")
+	} else if settlement == Settlement_CITY && g.Map[position.X][position.Y].Settlement != Settlement_TOWN {
+		return errors.New("city must be built on top of a town")
+	} else if settlement == Settlement_CAPITAL && g.Map[position.X][position.Y].Settlement != Settlement_CITY {
+		return errors.New("city must be built on top of a town")
 	}
-
-	// other settlements can't be in a forest
-	if settlement != Settlement_LUMBERMILL && g.Map[position.X][position.Y].Landscape != Landscape_FOREST {
-		return fmt.Errorf("building a %v can't be in a forest", settlement)
-	}
-
-	//TODO: add logic for cities and capitals which must be built on top of towns and cities respectively
 
 	// we are good to build the settlement
 	faction.Settlements[position.Index(g.Config.Map)] = settlement
 	g.Map[position.X][position.Y].Settlement = settlement
 	// and remove the resources from the faction
 	faction.Resources.Subtract(ConstructionResources(g.Config.Construction, settlement))
-
 	return nil
 }
 
@@ -95,7 +90,7 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 	if origin.Y >= g.Config.Map.Height {
 		return fmt.Errorf("origin Y (%d) exceeds game boundaries (%d)", origin.Y, g.Config.Map.Height)
 	}
-	
+
 	// check that there is enough population at that tile to make the move
 	posIndex := (origin.Y * g.Config.Map.Width) + origin.X
 	if populace, ok := faction.Population[posIndex]; ok {
@@ -103,10 +98,10 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 			return fmt.Errorf("more populace requested to move than is actually there. Max %d", populace)
 		}
 	} else {
-		return fmt.Errorf("no populace belonging to faction %s at pos x: %d, y: %d, index: %d", 
-		faction.Moniker, origin.X, origin.Y, posIndex)
+		return fmt.Errorf("no populace belonging to faction %s at pos x: %d, y: %d, index: %d",
+			faction.Moniker, origin.X, origin.Y, posIndex)
 	}
-	
+
 	// ensure that the destination tile can be moved to i.e. not mountains or lake
 	destination, destPos := g.neighborTile(origin, direction)
 	if destination == nil {
@@ -116,20 +111,21 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 		return fmt.Errorf("cannot move populace to %s", destination.Landscape)
 	}
 	destIndex := (destPos.Y * g.Config.Map.Width) + destPos.X
-	
+
 	// check to see if the move is an attack
 	if destination.Faction != nil && destination.Faction != faction {
 		if destination.Population > quantity { // defenders win
 			destination.Population -= quantity
 			destination.Faction.Population[destIndex] -= quantity
 		} else if quantity > destination.Population { // attackers win (we need to replace the tile)
+			result := quantity - destination.Population
 			g.Map[destPos.X][destPos.Y] = Tile{
-				Population: quantity - destination.Population,
-				Faction: faction,
-				Landscape: destination.Landscape,
+				Population: result,
+				Faction:    faction,
+				Landscape:  destination.Landscape,
 				Settlement: destination.Settlement,
 			}
-			faction.Population[destIndex] = quantity - destination.Population
+			faction.Population[destIndex] = result
 			delete(destination.Faction.Population, destIndex)
 			if destination.Settlement != Settlement_NONE { // player has captured an opponents settlement
 				delete(destination.Faction.Settlements, destIndex)
@@ -141,8 +137,8 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 		} else { // stalemate
 			g.Map[destPos.X][destPos.Y] = Tile{
 				Population: 0,
-				Faction: nil,
-				Landscape: destination.Landscape,
+				Faction:    nil,
+				Landscape:  destination.Landscape,
 				Settlement: destination.Settlement,
 			}
 			delete(destination.Faction.Population, destIndex)
@@ -154,8 +150,9 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 		faction.Population[destIndex] = quantity
 	} else { // player is transferring troops between two lands that the player already occupies
 		destination.Population += quantity
+		faction.Population[destIndex] = destination.Population
 	}
-	
+
 	// update the tile that was left behind
 	if quantity == g.Map[origin.X][origin.Y].Population { // all populace moved
 		if g.Map[origin.X][origin.Y].Settlement != Settlement_NONE { // player is abandoning their own settlement!
@@ -166,15 +163,15 @@ func (g *GameState) Move(faction *Faction, quantity uint32, origin *Position, di
 		settlement := g.Map[origin.X][origin.Y].Settlement
 		g.Map[origin.X][origin.Y] = Tile{
 			Population: 0,
-			Faction: nil,
-			Landscape: land,
+			Faction:    nil,
+			Landscape:  land,
 			Settlement: settlement,
 		}
 	} else { // only some of the populace moved
 		g.Map[origin.X][origin.Y].Population -= quantity
 		faction.Population[posIndex] = g.Map[origin.X][origin.Y].Population
 	}
-	
+
 	return nil
 }
 
@@ -189,7 +186,7 @@ func (g *GameState) UpdateResources() {
 		faction.Reap(g.Config.Production)
 		// reflect population changes on the map struct
 		for pos, populace := range faction.Population {
-			x, y := pos % g.Config.Map.Width, pos / g.Config.Map.Width
+			x, y := pos%g.Config.Map.Width, pos/g.Config.Map.Width
 			g.Map[int(x)][int(y)].Population = populace
 		}
 	}
@@ -212,24 +209,24 @@ func (g *GameState) neighborTile(position *Position, direction Direction) (*Tile
 	switch direction {
 	case Direction_LEFT:
 		if position.X == 0 {
-			return &g.Map[g.Config.Map.Width-1][position.Y], Position{X: g.Config.Map.Width-1, Y: position.Y}
+			return &g.Map[g.Config.Map.Width-1][position.Y], Position{X: g.Config.Map.Width - 1, Y: position.Y}
 		}
-		return &g.Map[position.X-1][position.Y], Position{X: position.X-1, Y: position.Y}
+		return &g.Map[position.X-1][position.Y], Position{X: position.X - 1, Y: position.Y}
 	case Direction_RIGHT:
 		if position.X == g.Config.Map.Width-1 {
 			return &g.Map[0][position.Y], Position{X: 0, Y: position.Y}
 		}
-		return &g.Map[position.X+1][position.Y], Position{X: position.X+1, Y: position.Y}
+		return &g.Map[position.X+1][position.Y], Position{X: position.X + 1, Y: position.Y}
 	case Direction_DOWN:
 		if position.Y == g.Config.Map.Height-1 {
 			return &g.Map[position.X][0], Position{X: position.X, Y: 0}
 		}
-		return &g.Map[position.X][position.Y+1], Position{X: position.X, Y: position.Y+1}
+		return &g.Map[position.X][position.Y+1], Position{X: position.X, Y: position.Y + 1}
 	case Direction_UP:
 		if position.Y == 0 {
-			return &g.Map[position.X][g.Config.Map.Height-1], Position{X: position.X, Y: g.Config.Map.Height-1}
+			return &g.Map[position.X][g.Config.Map.Height-1], Position{X: position.X, Y: g.Config.Map.Height - 1}
 		}
-		return &g.Map[position.X][position.Y-1], Position{X: position.X, Y: position.Y-1}
+		return &g.Map[position.X][position.Y-1], Position{X: position.X, Y: position.Y - 1}
 	default: //unknown direction
 		return nil, Position{}
 	}

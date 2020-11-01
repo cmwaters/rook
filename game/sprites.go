@@ -21,7 +21,7 @@ var (
 	quarrySprite,
 	rookSprite,
 	townSprite *ebiten.Image
-	
+
 	//landscapes
 	landSprites map[types.Landscape]*ebiten.Image
 	forestSprite,
@@ -35,9 +35,17 @@ var (
 	lightRedSprite,
 	blueSprite,
 	lightBlueSprite,
+	greenSprite,
+	lightGreenSprite,
+	yellowSprite,
+	lightYellowSprite,
+	purpleSprite,
+	lightPurpleSprite,
+	tealSprite,
+	lightTealSprite,
 	greySprite,
 	lightGreySprite *ebiten.Image
-	colors = []string{"red", "blue"}
+	colors = []string{"red", "green", "yellow", "blue", "purple", "teal"}
 )
 
 func init() {
@@ -45,7 +53,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-		
+
 	capitalSprite, _, err = util.NewImageFromFile(filepath.Join(pwd, "../../game/assets/Capital.png"), ebiten.FilterDefault)
 	if err != nil {
 		panic(err)
@@ -97,35 +105,55 @@ func init() {
 	_ = blueSprite.Fill(blueColor)
 	lightBlueSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = lightBlueSprite.Fill(lightBlueColor)
+	greenSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = greenSprite.Fill(greenColor)
+	lightGreenSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightGreenSprite.Fill(lightGreenColor)
+	yellowSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = yellowSprite.Fill(yellowColor)
+	lightYellowSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightYellowSprite.Fill(lightYellowColor)
+	purpleSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = purpleSprite.Fill(purpleColor)
+	lightPurpleSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightPurpleSprite.Fill(lightPurpleColor)
+	tealSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = tealSprite.Fill(tealColor)
+	lightTealSprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
+	_ = lightTealSprite.Fill(lightTealColor)
 	greySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = greySprite.Fill(greyColor)
 	lightGreySprite, _ = ebiten.NewImage(tileWidth, tileHeight, ebiten.FilterDefault)
 	_ = lightGreySprite.Fill(lightGreyColor)
-	
+
 	// add all the colors to an array
 	colorSprites = map[string]*ebiten.Image{
-		"red": redSprite, 
-		"blue": blueSprite,
-		"grey": greySprite,
+		"red":    redSprite,
+		"blue":   blueSprite,
+		"green":  greenSprite,
+		"yellow": yellowSprite,
+		"purple": purpleSprite,
+		"teal":   tealSprite,
+		"grey":   greySprite,
 	}
-	
+
 	landSprites = map[types.Landscape]*ebiten.Image{
-		types.Landscape_FOREST: forestSprite,
-		types.Landscape_LAKE: lakeSprite,
+		types.Landscape_FOREST:    forestSprite,
+		types.Landscape_LAKE:      lakeSprite,
 		types.Landscape_MOUNTAINS: mountainsSprite,
-		types.Landscape_PLAINS: plainsSprite,
+		types.Landscape_PLAINS:    plainsSprite,
 	}
-	
+
 	settlementSprites = map[types.Settlement]*ebiten.Image{
-		types.Settlement_CAPITAL: capitalSprite,
-		types.Settlement_CITY: citySprite,
-		types.Settlement_FARM: farmSprite,
+		types.Settlement_CAPITAL:    capitalSprite,
+		types.Settlement_CITY:       citySprite,
+		types.Settlement_FARM:       farmSprite,
 		types.Settlement_LUMBERMILL: lumbermillSprite,
-		types.Settlement_QUARRY: quarrySprite,
-		types.Settlement_ROOK: rookSprite,
-		types.Settlement_TOWN: townSprite,
+		types.Settlement_QUARRY:     quarrySprite,
+		types.Settlement_ROOK:       rookSprite,
+		types.Settlement_TOWN:       townSprite,
 	}
-	
+
 }
 
 func SpriteFromLandscape(l types.Landscape) *ebiten.Image {
@@ -181,10 +209,17 @@ func toActivatedColor(color *ebiten.Image) *ebiten.Image {
 		return lightRedSprite
 	case blueSprite:
 		return lightBlueSprite
+	case greenSprite:
+		return lightGreenSprite
+	case yellowSprite:
+		return lightYellowSprite
+	case purpleSprite:
+		return lightPurpleSprite
+	case tealSprite:
+		return lightTealSprite
 	case greySprite:
 		return lightGreySprite
 	default:
 		panic(fmt.Sprintf("%v is not a recognized color image in rook", color))
 	}
 }
-

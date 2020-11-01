@@ -33,7 +33,6 @@ func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
 		state.Factions[i] = types.NewFaction("player"+strconv.Itoa(i), *config.Initial)
 	}
 	state.PopulateFactions()
-	
 
 	return &LocalGameEngine{
 		tickSpeed:  3, // every 3 seconds
@@ -45,7 +44,7 @@ func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
 	}
 }
 
-// Init begins running the engine loop. This consists of updating the step, 
+// Init begins running the engine loop. This consists of updating the step,
 // checking if a player has won then processing all the build and move messages
 // from the player and each of the bots before updating the resources and sending
 // the visible state to each of the bots and the player.
@@ -98,7 +97,7 @@ func (l *LocalGameEngine) Move(quantity uint32, x, y int, direction types.Direct
 func (l *LocalGameEngine) processMessages() *types.Faction {
 	fmt.Printf("Received %d messages from player", len(l.moveQueue[len(l.bots)]))
 	for idx := 0; idx < len(l.bots)+1; idx++ {
-		
+
 		for _, buildMessage := range l.buildQueue[idx] {
 			err := l.state.Build(l.state.Factions[idx], buildMessage.Settlement, buildMessage.Position)
 			if err != nil {

@@ -58,8 +58,8 @@ func (c *Camera) ParseMovementKeys() {
 func (c *Camera) MoveTo(x, y int) {
 	// the second part of the assignment center the square in
 	// the middle of the screen as opposed to the top left
-	c.targetX = -float64(x) + (c.width - float64(tileWidth))/2
-	c.targetY = -float64(y) + (c.height - float64(tileHeight))/2
+	c.targetX = -float64(x) + (c.width-float64(tileWidth))/2
+	c.targetY = -float64(y) + (c.height-float64(tileHeight))/2
 }
 
 func (c *Camera) Update() *ebiten.DrawImageOptions {

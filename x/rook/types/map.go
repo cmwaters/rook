@@ -8,7 +8,7 @@ import (
 var (
 	// neighbor weightings. We want the heighest waiting to go to
 	// tiles with a single neighbor because this increases exploration
-	firstBucket = 8
+	firstBucket  = 8
 	secondBucket = 3
 )
 
@@ -38,15 +38,15 @@ func GenerateMap(config *MapConfig) [][]Tile {
 		}
 	}
 	// amount of tiles we want to be plains
-	plainsCount := (float64(config.PlainsDensity) / float64(terrainDensityTotal + config.PlainsDensity)) * 
-		float64(config.Width * config.Height)
+	plainsCount := (float64(config.PlainsDensity) / float64(terrainDensityTotal+config.PlainsDensity)) *
+		float64(config.Width*config.Height)
 	fmt.Println(plainsCount)
 	// use a path generation algorithm to inlaid the plains. This ensures
 	// that all plains are connected and that all civilizations can reach one another
-	startingPos := Position{config.Width/2, config.Height/2}
+	startingPos := Position{config.Width / 2, config.Height / 2}
 	firstBucketSet := make([]Position, 0, int(plainsCount))
 	secondBucketSet := make([]Position, 0, int(plainsCount))
-	isNotPlains := func (land Landscape) bool {
+	isNotPlains := func(land Landscape) bool {
 		return land != Landscape_PLAINS
 	}
 	// setup the first two tiles
@@ -70,10 +70,11 @@ func GenerateMap(config *MapConfig) [][]Tile {
 				continue
 			}
 			newPos := positions[randGen.Intn(len(positions))]
-			board[newPos.X][newPos.Y].Landscape = Landscape_PLAINS 
+			board[newPos.X][newPos.Y].Landscape = Landscape_PLAINS
 			firstBucketSet = append(firstBucketSet, newPos)
 			secondBucketSet = remove(secondBucketSet, chosenIndex)
-		} else { // use first bucket
+		} else if len(firstBucketSet) != 0 { // use first bucket
+			fmt.Println(len(firstBucketSet))
 			chosenIndex := randGen.Intn(len(firstBucketSet))
 			chosenPos := firstBucketSet[chosenIndex]
 			positions := possibleDirections(board, chosenPos, config.Width, config.Height, isNotPlains)
@@ -84,10 +85,12 @@ func GenerateMap(config *MapConfig) [][]Tile {
 				continue
 			}
 			newPos := positions[randGen.Intn(len(positions))]
-			board[newPos.X][newPos.Y].Landscape = Landscape_PLAINS 
+			board[newPos.X][newPos.Y].Landscape = Landscape_PLAINS
 			firstBucketSet = append(firstBucketSet, newPos)
 			firstBucketSet = remove(firstBucketSet, chosenIndex)
 			secondBucketSet = append(secondBucketSet, chosenPos)
+		} else {
+			num--
 		}
 	}
 	return board
@@ -102,27 +105,27 @@ func possibleDirections(board [][]Tile, pos Position, width, height uint32, cond
 	positions := make([]Position, 0, 4)
 	// check left
 	if pos.X == 0 && condition(board[width-1][pos.Y].Landscape) {
-		positions = append(positions, Position{width-1, pos.Y})
+		positions = append(positions, Position{width - 1, pos.Y})
 	} else if pos.X > 0 && condition(board[pos.X-1][pos.Y].Landscape) {
-		positions = append(positions, Position{pos.X-1, pos.Y})
+		positions = append(positions, Position{pos.X - 1, pos.Y})
 	}
 	// check right
 	if pos.X == width-1 && condition(board[0][pos.Y].Landscape) {
 		positions = append(positions, Position{0, pos.Y})
 	} else if pos.X < width-1 && condition(board[pos.X+1][pos.Y].Landscape) {
-		positions = append(positions, Position{pos.X+1, pos.Y})
+		positions = append(positions, Position{pos.X + 1, pos.Y})
 	}
 	// check above
 	if pos.Y == 0 && condition(board[pos.X][height-1].Landscape) {
-		positions = append(positions, Position{pos.X, height-1})
+		positions = append(positions, Position{pos.X, height - 1})
 	} else if pos.Y > 0 && condition(board[pos.X][pos.Y-1].Landscape) {
-		positions = append(positions, Position{pos.X, pos.Y-1})
+		positions = append(positions, Position{pos.X, pos.Y - 1})
 	}
 	// check below
 	if pos.Y == height-1 && board[pos.X][0].Landscape != Landscape_PLAINS {
-		positions = append(positions, Position{pos.X, height-1})
+		positions = append(positions, Position{pos.X, height - 1})
 	} else if pos.Y < height-1 && board[pos.X][pos.Y+1].Landscape != Landscape_PLAINS {
-		positions = append(positions, Position{pos.X, pos.Y+1})
+		positions = append(positions, Position{pos.X, pos.Y + 1})
 	}
 	return positions
 }

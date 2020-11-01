@@ -23,11 +23,11 @@ func DefaultMapConfig() *MapConfig {
 		Height: 20,
 		// seed needs to be generated
 		MountainsDensity: 3,
-		LakeDensity: 3,
-		ForestDensity: 4,
-		PlainsDensity: 6,
-		LineOfSight:     1,
-		RookLineOfSight: 3,
+		LakeDensity:      3,
+		ForestDensity:    4,
+		PlainsDensity:    6,
+		LineOfSight:      1,
+		RookLineOfSight:  3,
 	}
 }
 

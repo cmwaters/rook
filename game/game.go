@@ -58,7 +58,7 @@ func (g *GameView) Update(views map[string]View) (View, error) {
 	if inpututil.IsMouseButtonJustPressed(ebiten.MouseButtonLeft) {
 		g.handleClick(ebiten.CursorPosition())
 	}
-	g.parseMoveKeys() // arrow keys && WASD for move actions and navigation
+	g.parseMoveKeys()  // arrow keys && WASD for move actions and navigation
 	g.parseBuildKeys() // build keys for building settlements
 	g.camera.ParseMovementKeys()
 	return views[gameView], nil
@@ -81,7 +81,7 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 					}
 					if g.active.x == x && g.active.y == y {
 						_ = g.mapImage.DrawImage(toActivatedColor(FactionToColorSprite(g.board[x][y].Faction)), g.op)
-					} else { 
+					} else {
 						_ = g.mapImage.DrawImage(FactionToColorSprite(g.board[x][y].Faction), g.op)
 					}
 					if g.board[x][y].Settlement != types.Settlement_NONE {
@@ -91,7 +91,7 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 					}
 					// TODO: A more dynamic text positioning algorithm
 					if g.board[x][y].Population != 0 {
-						text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX + (tileWidth/2 - 6), posY + (tileHeight/2 + 6), whiteColor)
+						text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX+(tileWidth/2-6), posY+(tileHeight/2+6), whiteColor)
 					}
 				}
 			}
@@ -101,9 +101,9 @@ func (g *GameView) Draw(screen *ebiten.Image) {
 	_ = screen.DrawImage(g.mapImage, g.camera.Update())
 	ebitenutil.DebugPrint(
 		screen,
-		fmt.Sprintf("TPS: %0.2f\nCamera position %.2f, %.2f\nActive tile %d, %d\nResources Food: %d, Stone: %d, Wood: %d", 
-		ebiten.CurrentTPS(), -g.camera.posX, -g.camera.posY, g.active.x, g.active.y, 
-		g.resources.Food, g.resources.Stone, g.resources.Wood),
+		fmt.Sprintf("TPS: %0.2f\nCamera position %.2f, %.2f\nActive tile %d, %d\nResources Food: %d, Stone: %d, Wood: %d",
+			ebiten.CurrentTPS(), -g.camera.posX, -g.camera.posY, g.active.x, g.active.y,
+			g.resources.Food, g.resources.Stone, g.resources.Wood),
 	)
 }
 
@@ -159,7 +159,7 @@ func (g *GameView) deactivateCurrentTile() {
 		_ = g.mapImage.DrawImage(landSprites[prior.Landscape], g.op)
 	}
 	if prior.Population != 0 {
-		text.Draw(g.mapImage, strconv.Itoa(int(prior.Population)), mFont, priorPosX + (tileWidth/2 - 6), priorPosY + (tileHeight/2 + 6), whiteColor)
+		text.Draw(g.mapImage, strconv.Itoa(int(prior.Population)), mFont, priorPosX+(tileWidth/2-6), priorPosY+(tileHeight/2+6), whiteColor)
 	}
 }
 
@@ -175,7 +175,7 @@ func (g *GameView) activateTile(x, y, posX, posY int) {
 		_ = g.mapImage.DrawImage(landSprites[g.board[x][y].Landscape], g.op)
 	}
 	if g.board[x][y].Population != 0 {
-		text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX + (tileWidth/2 - 6), posY + (tileHeight/2 + 6), whiteColor)
+		text.Draw(g.mapImage, strconv.Itoa(int(g.board[x][y].Population)), mFont, posX+(tileWidth/2-6), posY+(tileHeight/2+6), whiteColor)
 	}
 }
 
@@ -183,36 +183,36 @@ func (g *GameView) parseMoveKeys() {
 	x, y := g.active.x, g.active.y
 	if inpututil.IsKeyJustPressed(ebiten.KeyUp) || inpututil.IsKeyJustPressed(ebiten.KeyW) {
 		if g.active.y == 0 {
-			y = int(g.config.Map.Height)-1
+			y = int(g.config.Map.Height) - 1
 		} else {
-			y = g.active.y-1
+			y = g.active.y - 1
 		}
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyDown) || inpututil.IsKeyJustPressed(ebiten.KeyS) {
 		if g.active.y == int(g.config.Map.Height)-1 {
 			y = 0
 		} else {
-			y = g.active.y+1
+			y = g.active.y + 1
 		}
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyLeft) || inpututil.IsKeyJustPressed(ebiten.KeyA) {
 		if g.active.x == 0 {
 			x = int(g.config.Map.Width) - 1
 		} else {
-			x = g.active.x-1
+			x = g.active.x - 1
 		}
 	} else if inpututil.IsKeyJustPressed(ebiten.KeyRight) || inpututil.IsKeyJustPressed(ebiten.KeyD) {
-		if g.active.x == int(g.config.Map.Width) {
+		if g.active.x == int(g.config.Map.Width)-1 {
 			x = 0
 		} else {
-			x = g.active.x+1
+			x = g.active.x + 1
 		}
 	}
 	if x != g.active.x || y != g.active.y { // we have moved
 		if g.board[x][y].Landscape != types.Landscape_UNKNOWN {
 			posX := tileMargin + (x * (tileWidth + tileMargin))
 			posY := tileMargin + (y * (tileHeight + tileMargin))
-			if inpututil.IsKeyJustPressed(ebiten.KeyRight) || inpututil.IsKeyJustPressed(ebiten.KeyLeft) || 
-			inpututil.IsKeyJustPressed(ebiten.KeyUp) || inpututil.IsKeyJustPressed(ebiten.KeyDown) { // action keys
-				if (g.board[g.active.x][g.active.y].Population > 0 && g.board[g.active.x][g.active.y].Faction.Moniker == g.moniker) {
+			if inpututil.IsKeyJustPressed(ebiten.KeyRight) || inpututil.IsKeyJustPressed(ebiten.KeyLeft) ||
+				inpututil.IsKeyJustPressed(ebiten.KeyUp) || inpututil.IsKeyJustPressed(ebiten.KeyDown) { // action keys
+				if g.board[g.active.x][g.active.y].Population > 0 && g.board[g.active.x][g.active.y].Faction.Moniker == g.moniker {
 					quantity, direction := g.attemptToMovePopulation(x, y)
 					if quantity != 0 {
 						fmt.Printf("Sending move request %v\n", direction)
@@ -222,7 +222,7 @@ func (g *GameView) parseMoveKeys() {
 			}
 			g.deactivateCurrentTile()
 			g.activateTile(x, y, posX, posY)
-			
+
 			if g.nearingBoundary(posX, posY) {
 				g.camera.MoveTo(posX, posY)
 			}
@@ -270,9 +270,9 @@ func (g *GameView) attemptToMovePopulation(targetX, targetY int) (quantity uint3
 
 	if targetX == g.active.x { // attempt was on the same vertical plane
 		// check if moving up
-		if g.active.y == 0  && targetY == int(g.config.Map.Height) - 1 || targetY == g.active.y - 1 {
+		if g.active.y == 0 && targetY == int(g.config.Map.Height)-1 || targetY == g.active.y-1 {
 			direction = types.Direction_UP
-		} else if g.active.y == int(g.config.Map.Height) - 1 && targetY == 0 || targetY == g.active.y + 1 {
+		} else if g.active.y == int(g.config.Map.Height)-1 && targetY == 0 || targetY == g.active.y+1 {
 			// moving down
 			direction = types.Direction_DOWN
 		} else {
@@ -280,9 +280,9 @@ func (g *GameView) attemptToMovePopulation(targetX, targetY int) (quantity uint3
 		}
 	} else if targetY == g.active.y { // attempt was on the same horizontal plane
 		// check if moving to the right
-		if g.active.x == int(g.config.Map.Width) - 1 && targetX == 0 || targetX == g.active.x + 1 {
+		if g.active.x == int(g.config.Map.Width)-1 && targetX == 0 || targetX == g.active.x+1 {
 			direction = types.Direction_RIGHT
-		} else if g.active.x == 0 && targetX == int(g.config.Map.Width) - 1 || targetX == g.active.x - 1 {
+		} else if g.active.x == 0 && targetX == int(g.config.Map.Width)-1 || targetX == g.active.x-1 {
 			// moving to the left
 			direction = types.Direction_LEFT
 		} else {
@@ -291,15 +291,15 @@ func (g *GameView) attemptToMovePopulation(targetX, targetY int) (quantity uint3
 	} else { // on neither planes
 		return 0, types.Direction_NOWHERE
 	}
-	
+
 	return
 }
 
 // perhaps we should be adding this to camera
 func (g *GameView) nearingBoundary(x, y int) bool {
-	adjX, adjY := float64(x) + g.camera.posX, float64(y) + g.camera.posY
-	return adjX < viewBoundaryMargin || adjX > g.camera.width - viewBoundaryMargin || 
-		adjY < viewBoundaryMargin || adjY > g.camera.height - viewBoundaryMargin
+	adjX, adjY := float64(x)+g.camera.posX, float64(y)+g.camera.posY
+	return adjX < viewBoundaryMargin || adjX > g.camera.width-viewBoundaryMargin ||
+		adjY < viewBoundaryMargin || adjY > g.camera.height-viewBoundaryMargin
 }
 
 func NewMapImage(config *types.MapConfig) *ebiten.Image {

@@ -46,9 +46,9 @@ func TestNewGameState(t *testing.T) {
 func TestGenerateMap(t *testing.T) {
 	c := DefaultGameConfig()
 	c.Map.Seed = rand.Int63()
-	
+
 	board := GenerateMap(c.Map)
-	
+
 	for x := 0; x < int(c.Map.Width); x++ {
 		for y := 0; y < int(c.Map.Height); y++ {
 			switch board[x][y].Landscape {
@@ -64,5 +64,5 @@ func TestGenerateMap(t *testing.T) {
 		}
 		fmt.Print("\n\n")
 	}
-	
+
 }

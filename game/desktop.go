@@ -2,7 +2,6 @@ package game
 
 import (
 	"fmt"
-	"math/rand"
 
 	"github.com/cmwaters/rook/x/rook/types"
 	"github.com/hajimehoshi/ebiten"
@@ -25,7 +24,6 @@ type RookDesktop struct {
 
 func NewRookDesktop() *RookDesktop {
 	config := types.DefaultGameConfig()
-	config.AddSeed(rand.Int63()) // this will just be used from local games
 	r := &RookDesktop{
 		ScreenWidth:  defaultScreenWidth,
 		ScreenHeight: defaultScreenHeight,
