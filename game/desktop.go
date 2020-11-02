@@ -10,8 +10,8 @@ import (
 const (
 	menuView            = "menu"
 	gameView            = "game"
-	defaultScreenWidth  = 640
-	defaultScreenHeight = 480
+	defaultScreenWidth  = 960
+	defaultScreenHeight = 640
 )
 
 // RookDesktop implements ebiten.Game interface.
