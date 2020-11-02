@@ -5,7 +5,7 @@
 ![](rook.jpeg)
 
 
-*This is still a work in progress. Not all features, notable the online part, is available*
+*This is still a work in progress. Not all features have been implemented (notably the multiplayer aspect)*
 
 ## Getting Started
 
