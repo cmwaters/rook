@@ -24,15 +24,15 @@ func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 3
-	r.HandleFunc("/custom/rook/"+types.QueryListBuild, listBuildHandler(clientCtx)).Methods("GET")
+	r.HandleFunc("/rook/games", listBuildHandler(clientCtx)).Methods("GET")
 
-	r.HandleFunc("/custom/rook/"+types.QueryListMove, listMoveHandler(clientCtx)).Methods("GET")
+	r.HandleFunc("/rook/state", listMoveHandler(clientCtx)).Methods("GET")
 
 }
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
 	// this line is used by starport scaffolding # 4
-	r.HandleFunc("/custom/rook/build", createBuildHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/rook/build", createBuildHandler(clientCtx)).Methods("POST")
 
-	r.HandleFunc("/custom/rook/move", createMoveHandler(clientCtx)).Methods("POST")
+	r.HandleFunc("/rook/move", createMoveHandler(clientCtx)).Methods("POST")
 }

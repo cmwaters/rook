@@ -49,8 +49,8 @@ func NewLocalGameEngine(config *types.GameConfig, bots int) *LocalGameEngine {
 // from the player and each of the bots before updating the resources and sending
 // the visible state to each of the bots and the player.
 func (l *LocalGameEngine) Init(state chan *types.PartialState) {
-	for _, b := range l.bots {
-		b.Init(*l.state.Config)
+	for idx, b := range l.bots {
+		b.Init(*l.state.Config, l.state.Factions[idx].Moniker)
 	}
 	// start the main game loop
 	fmt.Println("Starting engine loop")
@@ -138,7 +138,7 @@ func (l *LocalGameEngine) sendVisibleStates() *types.PartialState {
 func InitializeBots(count int) []bot.Bot {
 	bots := make([]bot.Bot, count)
 	for i := 0; i < count; i++ {
-		bots[i] = bot.NewComputer()
+		bots[i] = bot.NewRandomBot()
 	}
 	return bots
 }

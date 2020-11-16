@@ -5,7 +5,7 @@ import (
 )
 
 type Bot interface {
-	Init(types.GameConfig)
+	Init(types.GameConfig, string)
 	Update(types.PartialState) UpdateResponse
 }
 
