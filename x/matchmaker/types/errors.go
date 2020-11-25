@@ -6,7 +6,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
-// x/matchmaker module sentinel errors
+// x/rook module sentinel errors
 var (
-	ErrSample = sdkerrors.Register(ModuleName, 1100, "sample error")
+	ErrGameDoesNotExist = sdkerrors.Register(ModuleName, 1100, "game does not exist")
 )

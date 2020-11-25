@@ -2,7 +2,7 @@ package types
 
 const (
 	// ModuleName defines the module name
-	ModuleName = "matchmaker"
+	ModuleName = "rook"
 
 	// StoreKey defines the primary module store key
 	StoreKey = ModuleName
@@ -22,5 +22,9 @@ func KeyPrefix(p string) []byte {
 }
 
 const (
-	FindGameKey = "FindGame"
+	MoveKey = "Move"
+)
+
+const (
+	BuildKey = "Build"
 )

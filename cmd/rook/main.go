@@ -1,18 +1,14 @@
 package main
 
 import (
-	"log"
+	"os"
 
-	g "github.com/cmwaters/rook/game"
-	"github.com/hajimehoshi/ebiten"
+	"github.com/cmwaters/rook/cmd/rookd/cmd"
 )
 
 func main() {
-	game := g.NewRookDesktop()
-	ebiten.SetWindowResizable(true)
-	ebiten.SetWindowSize(game.ScreenWidth, game.ScreenHeight)
-	ebiten.SetWindowTitle("Rook")
-	if err := ebiten.RunGame(game); err != nil {
-		log.Fatal(err)
+	rootCmd, _ := cmd.NewRootCmd()
+	if err := cmd.Execute(rootCmd); err != nil {
+		os.Exit(1)
 	}
 }

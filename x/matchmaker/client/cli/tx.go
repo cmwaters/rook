@@ -7,7 +7,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cmwaters/rook/x/matchmaker/types"
+	"github.com/cmwaters/rook/x/rook/types"
 )
 
 // GetTxCmd returns the transaction commands for this module
@@ -22,7 +22,9 @@ func GetTxCmd() *cobra.Command {
 
 	// this line is used by starport scaffolding # 1
 
-	cmd.AddCommand(CmdCreateFindGame())
+	// cmd.AddCommand(CmdCreateBuild())
+
+	// cmd.AddCommand(CmdCreateMove())
 
 	return cmd
 }
