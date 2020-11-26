@@ -7,7 +7,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	// "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/cmwaters/rook/x/matchmaker/types"
 )
 
 // GetTxCmd returns the transaction commands for this module

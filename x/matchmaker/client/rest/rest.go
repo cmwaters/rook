@@ -3,7 +3,7 @@ package rest
 import (
 	"github.com/gorilla/mux"
 
-	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/cmwaters/rook/x/matchmaker/types"
 	"github.com/cosmos/cosmos-sdk/client"
 )
 

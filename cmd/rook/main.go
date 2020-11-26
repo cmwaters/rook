@@ -2,13 +2,17 @@ package main
 
 import (
 	"os"
-
-	"github.com/cmwaters/rook/cmd/rookd/cmd"
 )
 
 func main() {
-	rootCmd, _ := cmd.NewRootCmd()
-	if err := cmd.Execute(rootCmd); err != nil {
+	rootCmd, _ := NewRootCmd()
+	if err := Execute(rootCmd); err != nil {
+		// TODO: enable this for 0.41
+		//switch e := err.(type) {
+		//case server.ErrorCode:
+		//	os.Exit(e.Code)
+		//default:
 		os.Exit(1)
+		//}
 	}
 }

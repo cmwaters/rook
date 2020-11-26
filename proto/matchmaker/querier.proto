@@ -3,22 +3,32 @@ package rook.matchmaker;
 
 import "cosmos/base/query/v1beta1/pagination.proto";
 // this line is used by starport scaffolding # 1
-import "matchmaker/findGame.proto";
+import "matchmaker/pool.proto";
+import "gogoproto/gogo.proto";
 
 option go_package = "github.com/cmwaters/rook/x/matchmaker/types";
 
 // Query defines the gRPC querier service.
 service Query {
-    // this line is used by starport scaffolding # 2
-	rpc AllFindGame(QueryAllFindGameRequest) returns (QueryAllFindGameResponse);
+	rpc Pools(QueryPoolsRequest) returns (QueryPoolsResponse);
+	// do we want invitations to be publicly accessible. I guess so for now
+	rpc Invitations(QueryInvitationsRequest) returns (QueryInvitationsResponse);
 }
 
-// this line is used by starport scaffolding # 3
-message QueryAllFindGameRequest {
+message QueryPoolsRequest {
 	cosmos.base.query.v1beta1.PageRequest pagination = 1;
 }
 
-message QueryAllFindGameResponse {
-	repeated MsgFindGame findGame = 1;
+message QueryPoolsResponse {
+	repeated Pool pools = 1;
+	cosmos.base.query.v1beta1.PageResponse pagination = 2;
+}
+message QueryInvitationsRequest {
+	bytes account = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+	cosmos.base.query.v1beta1.PageRequest pagination = 2;
+}
+
+message QueryInvitationsResponse {
+	repeated Pool invitations = 1;
 	cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }

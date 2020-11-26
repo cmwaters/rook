@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/tendermint/tendermint/libs/log"
-
-	"github.com/cmwaters/rook/x/rook/types"
+	"github.com/CosmWasm/wasmd/x/wasm"
+	"github.com/cmwaters/rook/x/matchmaker/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -20,7 +20,7 @@ type Keeper struct {
 	players      map[string]string
 }
 
-func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey) *Keeper {
+func NewKeeper(cdc codec.Marshaler, storeKey, memKey sdk.StoreKey, wasmKeeper wasm.Keeper) *Keeper {
 	return &Keeper{
 		cdc:      cdc,
 		storeKey: storeKey,
